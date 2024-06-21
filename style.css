@@ -1,0 +1,264 @@
+* {
+    overflow: hidden;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* #54656F */
+
+body {
+    background-color: #F0F2F5;
+    padding: 0;
+    margin: 0;
+}
+
+#app {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 0.044fr 0.3fr 0.656fr;
+    padding: 0;
+    margin: 0;
+}
+
+/* #nav {
+    width: 60px;
+} */
+
+
+
+
+/* Master */
+#master {
+    background-color: #FFFFFF;
+    position: relative;
+}
+
+#master .heading {
+    padding-left: 25px;
+    padding-right: 20px;
+    height: 59px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.heading h2 {
+    padding: 0;
+    margin: 0;  
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 32px;
+}
+
+.heading .btns {
+    display: flex;
+}
+
+.heading .btn-bg {
+    border-radius: 20px;
+    height: 40px;
+    width: 40px;
+}
+
+.heading img {
+    width: 24px;
+    height: 24px;
+    padding: 8px;
+}
+
+.menu {
+    z-index: 10 !important;
+    position: absolute;
+    background-color: #FFFFFF;
+    top: 54px;
+    right: 25px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 8px;
+    border-radius: 3px;
+    width: 228px;
+    display: none;
+}
+
+.menu ul {
+    padding: 8px 0;
+    margin: 0;
+    list-style: none;
+}
+
+.menu li {
+    padding: 10px 23px;
+    color: #54656F;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.menu li:hover {
+    background-color: rgb(240, 242, 245, 0.6);
+}
+
+.search {
+    margin: 6px 12px;
+    background-color: #F0F2F5;
+    border-radius: 8px;
+    height: 35px;   
+    align-items: center;
+    position: relative;
+}
+
+.search .img {
+    margin-left: 17px;
+}
+
+img.search-icon {
+    height: 15px;
+    width: 15px;
+    position: absolute;
+    top: 10px;
+}
+
+img.back {
+    height: 18px;
+    width: 18px;  
+    position: absolute;
+    top: 8px;  
+}
+
+img.cancel {
+    margin-left: 5px;
+    position: absolute;
+    top: 10px;
+    height: 15px;
+    width: 15px;
+}
+
+img.back, img.cancel {
+    display: none;
+}
+
+.search input {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    width: 286px;
+    height: 22px;
+    margin-left: 65px;
+    padding: 5.5px 0;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+/* .search input:focus img.back{
+    display: block;
+} */
+
+.filter-btns {
+    margin: 0 12px;
+    padding: 2px 0 6px 0;
+}
+
+.filter-btns button {
+    background-color: #F0F2F5;
+    border: none;
+    padding: 6px 13px;
+    margin: 1.5px;
+    border-radius: 17px;
+}
+
+.filter-btns button span {
+    color: #54656F;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+.filter-btns .selected {
+    background-color: #E7FCE3;
+}
+
+.filter-btns .selected span {
+    color: #008069;
+}
+
+.chat {
+    margin-right: 12px;
+    height: 72px;
+    align-items: center;
+    display: grid;
+    grid-template-columns: 0.15fr 1fr;
+    color: #54656F;
+}
+
+.chat:hover {
+    background-color: rgb(240, 242, 245, 0.6);
+}
+
+.profile-pic {
+    margin: 12px;
+    height: 49px;
+    width: 49px;
+    border-radius: 25px;
+    background-color: #DFE5E7;
+    align-items: center;
+}
+
+.profile-pic .user {
+    height: 35px;
+    width: 35px;
+    margin: 7px;
+}
+
+.preview .content {
+    padding: 12px 0;
+    position: relative;
+}
+
+.preview p, h3 {
+    padding: 0;
+    margin: 0;
+}
+
+.preview .top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.preview .name {
+    padding: 0;
+    margin: 0;
+    color: black !important;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.preview .date-time {
+    font-size: 12px;
+}
+
+.preview img {
+    height: 17px;
+    width: 17px;
+}
+
+img.tick {
+    position: absolute;
+    top: 36px;
+}
+
+.content p {
+    margin-left: 20px;
+}
+
+img.open {
+    position: absolute;
+    top: 38px;
+    right: 15px;
+    display: none;
+}
+
+.divider{
+    width: 100%;
+    height: 1px;
+    background-color: #F0F2F5;
+}
