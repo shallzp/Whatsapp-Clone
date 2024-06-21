@@ -8,75 +8,329 @@
 <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
 <link rel="stylesheet" href="style.css">
 
-<body>
+<body class="default-bg">
     <div id="app">
         <div id="nav">
-
-        </div>
-
-        <div id="master">
-            <div class="header">
-                <div class="heading">
-                    <h2>Chats</h2>
-                    <div class="btns">
-                        <div class="btn-bg"><img src="./images/icons/new-chat.png" alt="New chat"></div>
-                        <div class="btn-bg"><img src="./images/icons/menu.png" alt="Menu"></div>
+            <div class="top">
+                <div class="btns">
+                    <div class="nav-items active" name="chat-room">
+                        <img src="./images/icons/chat-room.png">
                     </div>
+                    <button><span>Chats</span></button>
                 </div>
-
-                <div class="menu">
-                    <ul>
-                        <li>New group</li>
-                        <li>Starred messages</li>
-                        <li>Select chats</li>
-                        <li>Log Out</li>
-                        <div class="divider"></div>
-                        <li>Get Whatsapp for Windows</li>
-                    </ul>
-                </div>
-    
-                <div class="search">
-                    <div class="img">
-                        <img src="./images/icons/search.png" class="search-icon">
-                        <img src="./images/icons/back.png" class="back">
+                <div class="btns">
+                    <div class="nav-items" name="community">
+                        <img src="./images/icons/community.png">
                     </div>
-                    <input type="text" placeholder="Search">
-                    <img src="./images/icons/cancel.png" class="cancel">
+                    <button><span>Communities</span></button>
                 </div>
-    
-                <div class="filter-btns">
-                    <button class="selected"><span>All</span></button>
-                    <button><span>Unread</span></button>
-                    <button><span>Groups</span></button>
+                <div class="btns">
+                    <div class="nav-items" name="status">
+                        <img src="./images/icons/wp-status.png">
+                    </div>
+                    <button><span>Status</span></button>
+                </div>
+                <div class="btns">
+                    <div class="nav-items" name="channel">
+                        <img src="./images/icons/wp-channel.png">
+                    </div>
+                    <button><span>Channels</span></button>
                 </div>
             </div>
-
-            <div class="chat-list">
-                <div class="chat">
-                    <div class="profile-pic">
-                        <img src="./images/icons/user.png" class="user">
+            <div class="bottom">
+                <div class="btns">
+                    <div class="nav-items" name="settings">
+                        <img src="./images/icons/settings.png">
                     </div>
-                    <div class="preview">
-                        <div class="content">
-                            <div class="info">
-                                <div class="top">
-                                    <h3 class="name">Shalini Patel</h3>
-                                    <div class="date-time">20/06/2024</div>
+                    <button><span>Settings</span></button>
+                </div>
+                <div class="btns">
+                    <div class="nav-items my-profile" name="profile"></div>
+                    <button><span>Profile</span></button>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="vertical-divider"></div>
+        <div id="master" class="white-bg">
+            <div class="chat-room">
+                <div class="header white-bg">
+                    <div class="heading">
+                        <h2>Chats</h2>
+                        <div class="btns">
+                            <div><img src="./images/icons/new-chat.png" alt="New chat"></div>
+                            <div><img src="./images/icons/menu.png" alt="Menu"></div>
+                        </div>
+                    </div>
+    
+                    <div class="menu white-bg">
+                        <ul>
+                            <li>New group</li>
+                            <li>Starred messages</li>
+                            <li>Select chats</li>
+                            <li>Log Out</li>
+                            <div class="horizontal-divider default-bg"></div>
+                            <li>Get Whatsapp for Windows</li>
+                        </ul>
+                    </div>
+        
+                    <div class="search default-bg">
+                        <div class="img">
+                            <img src="./images/icons/search.png" class="search-icon">
+                            <img src="./images/icons/back-green.png" class="back">
+                        </div>
+                        <input type="text" placeholder="Search">
+                        <img src="./images/icons/cancel.png" class="cancel">
+                    </div>
+        
+                    <div class="filter-btns">
+                        <button class="selected default-bg"><span>All</span></button>
+                        <button class="default-bg"><span>Unread</span></button>
+                        <button class="default-bg"><span>Groups</span></button>
+                    </div>
+                </div>
+    
+                <div class="contents">
+                    <div class="chat-list">
+                        <div class="chat">
+                            <div class="profile-pic">
+                                <img src="./images/icons/user.png" class="user">
+                            </div>
+                            <div class="preview">
+                                <div class="content">
+                                    <div class="info">
+                                        <div class="top">
+                                            <h3 class="name">Shalini Patel</h3>
+                                            <div class="date-time">20/06/2024</div>
+                                        </div>
+                                        <img src="./images/icons/unread.png" class="tick">
+                                        <p>Okay</p>
+                                        <img src="./images/icons/open.png" class="open">
+                                    </div>
                                 </div>
-                                <img src="./images/icons/unread.png" class="tick">
-                                <p>Okay</p>
-                                <img src="./images/icons/open.png" class="open">
+                                <div class="horizontal-divider default-bg"></div>
+                            </div>
+                            <div class="menu group white-bg">
+                                <ul>
+                                    <li>Archive chat</li>
+                                    <li>Mute notifications</li>
+                                    <li>Exit group</li>
+                                    <li>Pin chat</li>
+                                    <li>Mark as unread</li>
+                                </ul>
+                            </div>
+                            <div class="menu contact white-bg">
+                                <ul>
+                                    <li>Archive chat</li>
+                                    <li>Mute notifications</li>
+                                    <li>Delete chat</li>
+                                    <li>Pin chat</li>
+                                    <li>Mark as unread</li>
+                                    <li>Block</li>
+                                </ul>
                             </div>
                         </div>
-                        <div class="divider"></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="community">
+                <div class="header white-bg">
+                    <div class="heading">
+                        <h2>Communities</h2>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="status">
+                <div class="header white-bg">
+                    <div class="heading">
+                        <h2>Status</h2>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="channel">
+                <div class="header white-bg">
+                    <div class="heading">
+                        <h2>Channels</h2>
+                        <div class="btns">
+                            <img src="./images/icons/add.png">
+                        </div>
+                    </div>
+
+                    <div class="search default-bg">
+                        <div class="img">
+                            <img src="./images/icons/search.png" class="search-icon">
+                        </div>
+                        <input type="text" placeholder="Search">
+                        <img src="./images/icons/cancel.png" class="cancel">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="settings">
+                <div class="header white-bg">
+                    <div class="heading">
+                        <h2>Settings</h2>
+                    </div>
+    
+                    <div class="search default-bg">
+                        <div class="img">
+                            <img src="./images/icons/search.png" class="search-icon">
+                        </div>
+                        <input type="text" placeholder="Search">
+                        <img src="./images/icons/cancel.png" class="cancel">
+                    </div>
+                </div>
+
+                <div class="contents">
+                    <div class="profile-open">
+                        <div class="my-profile"></div>
+                        <div class="info">
+                            <p>Shalini Patel</p>
+                            <p>About</p>
+                        </div>
+                    </div>
+    
+                    <div class="setting">
+                        <div class="setting-icon">
+                            <img src="./images/icons/account.png">
+                        </div>
+                        <div class="setting-name">
+                            <p>Account</p>
+                            <div class="horizontal-divider default-bg"></div>
+                        </div>
+                    </div>
+
+                    <div class="setting">
+                        <div class="setting-icon">
+                            <img src="./images/icons/privacy.png">
+                        </div>
+                        <div class="setting-name">
+                            <p>Privacy</p>
+                            <div class="horizontal-divider default-bg"></div>
+                        </div>
+                    </div>
+
+                    <div class="setting">
+                        <div class="setting-icon">
+                            <img src="./images/icons/new-chat.png">
+                        </div>
+                        <div class="setting-name">
+                            <p>Chats</p>
+                            <div class="horizontal-divider default-bg"></div>
+                        </div>
+                    </div>
+
+                    <div class="setting">
+                        <div class="setting-icon">
+                            <img src="./images/icons/notification.png">
+                        </div>
+                        <div class="setting-name">
+                            <p>Notifications</p>
+                            <div class="horizontal-divider default-bg"></div>
+                        </div>
+                    </div>
+
+                    <div class="setting">
+                        <div class="setting-icon">
+                            <img src="./images/icons/keyboard.png">
+                        </div>
+                        <div class="setting-name">
+                            <p>Keyboard shortcuts</p>
+                            <div class="horizontal-divider default-bg"></div>
+                        </div>
+                    </div>
+
+                    <div class="setting">
+                        <div class="setting-icon">
+                            <img src="./images/icons/help.png">
+                        </div>
+                        <div class="setting-name">
+                            <p>Help</p>
+                            <div class="horizontal-divider default-bg"></div>
+                        </div>
+                    </div>
+
+                    <div class="setting">
+                        <div class="setting-icon">
+                            <img src="./images/icons/log-out.png">
+                        </div>
+                        <div class="setting-name">
+                            <p>Log out</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="profile">
+                <div class="header white-bg">
+                    <div class="heading set-open">
+                        <img src="./images/icons/back.png">
+                        <p>Profile</p>
+                    </div>
+    
+                    <div class="heading nav-open">
+                        <h2>Profile</h2>
+                    </div>
+                </div>
+
+                <div class="contents">
+                    <div class="icon default-bg">
+                        <div class="my-profile"></div>
+                    </div>
+    
+                    <div class="input white-bg">
+                        <p>Your name</p>
+                        <div class="profile-name">
+                            <input type="text">
+                            <img src="./images/icons/edit.png">
+                        </div>
+                    </div>
+    
+                    <div class="note default-bg">
+                        <p>This is not your username or PIN. This name will be visible to your WhatsApp contacts.</p>
+                    </div>
+    
+                    <div class="input white-bg">
+                        <p>About</p>
+                        <div class="profile-name">
+                            <input type="text">
+                            <img src="./images/icons/edit.png">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="details">
 
-            <div class="footer"></div>
+
+
+        <div class="vertical-divider"></div>
+        <div id="details">
+            <div class="default">
+                <img src="./images/default.png">
+                <h1>Download WhatsApp for Windows</h1>
+                <p>Make calls, share your screen and get a faster experience when you download the Windows app.</p>
+                <button><span>Get from Miscrosoft Store</span></button>
+                <p><img src="./images/icons/lock.png">Your personal messages are end-to-end encrypted</p>
+            </div>
+
+
+            <div class="chat-screen">
+                <div class="header white-bg"></div>
+                <div class="msg-box"></div>
+                <div class="footer"></div>
+            </div>
         </div>
     </div>
 
