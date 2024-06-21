@@ -23,7 +23,6 @@ body {
 
 #app {
     height: 100vh;
-    /* height: 920px; */
     display: flex;
     flex-direction: row;
     padding: 0;
@@ -302,13 +301,14 @@ img.back, img.cancel {
     width: 49px;
     border-radius: 25px;
     background-color: #DFE5E7;
+    display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .profile-pic .user {
     height: 35px;
     width: 35px;
-    margin: 5px;
 }
 
 .preview .content {
@@ -383,6 +383,7 @@ img.open {
     margin-top: 106px;
     height: calc(100vh - 106px);
 }
+
 
 /* Settings */
 .profile-open {
@@ -503,12 +504,14 @@ img.open {
 /* Detail */
 #details {
     height: 100vh;
-    width: calc(100% - 29% - 60px);
+    width: calc(100vw - 29vw - 60px);
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
+
+/* Default */
 .default {
     display: flex;
     flex-direction: column;
@@ -517,6 +520,7 @@ img.open {
     align-items: center;
     justify-content: center;
     color: #54656F;
+    display: none;
 }
 
 .default img {
@@ -567,11 +571,72 @@ img.open {
     padding-right: 2px;
 }
 
+
+/* Chat Screen */
 .chat-screen {
     height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.chat-screen .header {
+    position: absolute;
+    top: 0;
+    width: calc(100% - 32px);
+    display: grid;
+    grid-template-columns: 0.1fr 0.6fr 0.3fr;
+    padding: 10px 16px;
+}
+
+.chat-screen .profile-pic {
+    padding: 0;
+    margin: 0;
+    height: 38px;
+    width: 38px;
+}
+
+.msg-box {
+    height: 100vh;
     width: 100%;
     background-image: url(./images/chat-background.png);
     background-repeat: no-repeat;
     background-size: cover;
-    display: none;
+    /* display: none; */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.chat-screen .footer {
+    padding: 10px 16px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: calc(100% - 32px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chat-screen .btns {
+    display: flex;
+    position: relative;
+    align-items: center;
+}
+
+.chat-screen .btns img {
+    padding: 5px;
+    height: 26px;
+    width: 26px;
+}
+
+.footer input {
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    padding: 9px 12px;
+    color: #54656F;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 22px;
+    width: 700px;
 }

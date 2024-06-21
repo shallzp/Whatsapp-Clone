@@ -2,17 +2,8 @@ $(document).ready(() => {
     clearMaster();
     $(".chat-room").show();
     setupNavigationFiltering();
-
-
-    // $(window).scroll(() => {
-    //     if (window.scrollY > 5) {
-    //         $("#header").addClass("black-bg");
-    //     } 
-    //     else {
-    //         $("#header").removeClass("black-bg");
-    //     }
-    // });
 });
+
 
 $("#master .heading img").each(function(index) {
     $(this).click(function() {
@@ -27,7 +18,7 @@ $("#master .heading img").each(function(index) {
 $("#master .chat-room .chat").each(function() {
     $(this).on("contextmenu", function(event) {
         event.preventDefault();
-        $(".chat .menu.contact").show();
+        $(".chat .menu-contact").show();
     });
 });
 
