@@ -1,10 +1,10 @@
 /* Utility Classes */
 .default-bg {
-    background-color: #F0F2F5;
+    background-color: #F0F2F5 !important;
 }
 
 .white-bg {
-    background-color: #FFFFFF;
+    background-color: #FFFFFF !important;
 }
 
 
@@ -23,6 +23,7 @@ body {
 
 #app {
     min-height: 100vh;
+    max-width: 100vw;
     display: flex;
     flex-direction: row;
     padding: 0;
@@ -501,6 +502,7 @@ img.open {
 
 /* Detail */
 #details {
+    /* min-width: calc((100vw - 29vw - 60px)/2 + 42px); */
     width: calc(100vw - 29vw - 60px);
     display: flex;
     flex-direction: column;
@@ -572,7 +574,7 @@ img.open {
 /* Chat Screen */
 .chat-screen {
     height: 100%;
-    width: 100%;
+    width: calc(100%);
     position: relative;
 }
 
@@ -600,15 +602,23 @@ img.open {
     gap: 15px;
 }
 
-.chat-screen .header .right .drop {
+.chat-screen .header .right button {
     border-radius: 20px;
-    /* border: 1px solid #A2ACB2; */
-    border: none;
+    border: 1px solid #A2ACB2;
+    /* border: none; */
+    padding: 6px 10px;
 }
 
-.chat-screen .header .right .drop img{
+.chat-screen .header .right button img{
     height: 18px;
     width: 18px;
+}
+
+.chat-screen .header .menu {
+    width: 220px;
+    z-index: 15 !important;
+    top: 55px;
+    right: 20px;
 }
 
 .chat-screen .right .btns {
@@ -632,7 +642,6 @@ img.open {
     height: calc(100% - 120px);
     margin-top: 60px;
     margin-bottom: 60px;
-    width: calc(100% -30px);
     background-image: url(./images/chat-background.png);
     background-repeat: no-repeat;
     background-size: cover;
@@ -646,7 +655,13 @@ img.open {
     align-items: center;
 }
 
-.chat-screen .date-day, .chat-screen .msg {
+.msg-row {
+    display: flex;
+    background-color: transparent;
+    width: 100%;
+}
+
+.date-day, .msg {
     display: inline-flex;
     background-color: #FFFFFF;
     padding: 5px 12px 6px 12px;
@@ -659,19 +674,14 @@ img.open {
     max-width: fit-content;
 }
 
-.chat-screen .date-day {
-    display: flex;
-    justify-content: center;
-}
-
-.chat-screen .on-top {
+.on-top {
     position: absolute;
     top: 10px;
     left: 44.5%;
     z-index: 20;
 }
 
-.chat-screen .date-day h4 {
+.date-day h4 {
     font-size: 13px;
     line-height: 21px;
     color: #54656F;
@@ -679,7 +689,7 @@ img.open {
     margin: 0;
 }
 
-.chat-screen .msg {
+.msg {
     padding: 6px 7px 8px 9px !important;
 }
 
@@ -701,7 +711,7 @@ img.open {
     padding: 0 50px 0 0;
 }
 
-.chat-screen .msg .right-bottom {
+.msg .right-bottom {
     position: absolute;
     bottom: 3px;
     right: 6px;
@@ -710,7 +720,7 @@ img.open {
     gap: 5px;
 }
 
-.chat-screen .msg-text {
+.msg-text {
     font-size: 14px;
     line-height: 19px;
     color: black;
@@ -718,27 +728,77 @@ img.open {
     margin: 0;
 }
 
-.chat-screen .msg .right-bottom img {
+.msg .right-bottom img {
     height: 15px;
     width: 15px;
 }
 
-.chat-screen .msg .time {
+.msg .time {
     color: #54656F;
     font-size: 11px;
     line-height: 15px;
 }
 
-.chat-screen .msg .img-hover {
+.msg .img-hover {
+    position: absolute;
+    border-radius: 12px;
+    height: 24px;
+    width: 24px;
     display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.msg .menu-hover {
+    top: 4px;
+    right: 2px;
+}
+
+.msg.sent .menu-hover {
+    background-color: #D9FDD3;
+}
+
+.msg.sent .menu {
+    top: 25px;
+    right: 10px;
+    width: 120px;
+}
+
+.msg.recieved .menu-hover {
+    background-color: #FFFFFF;
+}
+
+.msg.recieved .menu {
+    top: 25px;
+    right: -80px;
+    width: 120px;
+}
+
+.menu-hover img {
+    height: 24px;
+    width: 24px;
+}
+
+.msg.sent .emoji-hover {
+    background-color: rgba(0, 0, 0, .13);
+    top: 4.5px;
+    left: -30px;
+}
+
+.msg.recieved .emoji-hover {
+    background-color: rgba(0, 0, 0, .13);
+    top: 4.5px;
+    right: -30px;
+}
+
+.emoji-hover img {
     height: 20px;
     width: 20px;
 }
 
-.chat-screen .msg:hover .chat-screen .msg img {
-    display: block;
+.msg-row:hover .img-hover {
+    display: flex;
 }
-
 
 .chat-screen .footer {
     padding: 10px 16px;
@@ -767,3 +827,70 @@ img.open {
     line-height: 22px;
     width: 96%;
 }
+
+
+
+
+/* Search Tab */
+.search-tab {
+    min-width: calc((100vw - 29vw - 60px)/3);
+    display: none;
+}
+
+.search-tab .search-header {
+    padding-bottom: 10px;
+}
+
+.search-tab .heading, .search-tab .filter {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+}
+
+.search-tab .heading {
+    padding: 0 20px 0 25px;
+}
+
+.search-tab .heading img {
+    height: 24px;
+    width: 24px;
+}
+
+.search-tab .heading p {
+    font-size: 16px;
+    line-height: 32px;
+    font-size: 400;
+    padding-left: 20px;
+}
+
+.search-tab .filter {
+    padding: 0 12px;
+    gap: 12px;
+}
+
+.search-tab .filter .search {
+    width: 92%;
+    margin: 0 !important;
+}
+
+.search-tab .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100% - 110px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.search-tab .content .comment {
+    color: #8696A0;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+}
+
+
+
+/* 1300 se niche me search pura occupy krr lega aur details hide ho jaega */

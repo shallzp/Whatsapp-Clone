@@ -8,7 +8,7 @@ $(document).ready(() => {
 $("#master .heading img").each(function(index) {
     $(this).click(function() {
         if (index === 1) {
-            $(".header .menu").toggle();
+            $("#master .header .menu").toggle();
         } 
         $(this).toggleClass("clicked");
     });
@@ -16,9 +16,8 @@ $("#master .heading img").each(function(index) {
 
 
 $("#master .chat-room .chat").each(function() {
-    $(this).on("contextmenu", function(event) {
-        event.preventDefault();
-        $(".chat .menu-contact").show();
+    $(this).on("click", function() {
+        $(".chat .menu-contact").toggle();
     });
 });
 
@@ -32,14 +31,14 @@ function setActiveNavItem(activeItem) {
 }
 
 function setupNavigationFiltering() {
-    const navItems = $('.nav-items');
+    const navItems = $(".nav-items");
 
     navItems.each(function() {
-        $(this).on('click', function() {
-            const itemName = $(this).attr('name');
+        $(this).on("click", function() {
+            const itemName = $(this).attr("name");
             setActiveNavItem(this);
             clearMaster();
-            $('.' + itemName).show();
+            $("." + itemName).show();
         });
     });
 }
@@ -63,8 +62,6 @@ function filterContent(name) {
     else if (name === "languages") {
         
     }
-
-    // window.location.hash = "home-page" + '?' + category ;
 }
 
 function clearMaster() {
@@ -75,3 +72,27 @@ function clearMaster() {
     $(".settings").hide();
     $(".profile").hide();
 }
+
+
+
+
+//Details
+
+//Header
+$(".search-chat").on("click", function() {
+    $(this).toggleClass("clicked");
+    $(".search-tab").show();
+    $("#details").css("width", "calc((100vw - 29vw - 60px)/2 + 42px)");
+});
+
+$(".chat-screen .header .menu-btn").click(function() {
+    $(".chat-screen .header .menu").toggle();
+    $(this).toggleClass("clicked");
+});
+
+//Msg box
+$(".msg-row .menu-hover").each(function() {
+    $(this).on("click", function() {
+        $(this).siblings(".menu").toggle();
+    });
+});
