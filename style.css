@@ -16,13 +16,12 @@
 }
 
 body {
-    overflow: hidden;
+    /* overflow: hidden; */
     padding: 0;
     margin: 0;
 }
 
 #app {
-    height: 100vh;
     display: flex;
     flex-direction: row;
     padding: 0;
@@ -30,7 +29,6 @@ body {
 }
 
 .vertical-divider {
-    height: 100vh;
     width: 0.7px;
     background-color: #D9DBDF;
 }
@@ -40,8 +38,7 @@ body {
 
 /* Nav Row */
 #nav {
-    height: 100vh;
-    width: 60px;
+    width: 60px !important;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -98,9 +95,9 @@ body {
 
 
 
+
 /* Master */
 #master {
-    height: 100vh;
     width: 29%;
     min-width: 340px;
     position: relative;
@@ -329,7 +326,7 @@ img.back, img.cancel {
     justify-content: space-between;
 }
 
-.preview .name {
+.contact-name {
     padding: 0;
     margin: 0;
     color: black !important;
@@ -503,7 +500,6 @@ img.open {
 
 /* Detail */
 #details {
-    height: 100vh;
     width: calc(100vw - 29vw - 60px);
     display: flex;
     flex-direction: column;
@@ -583,38 +579,39 @@ img.open {
     position: absolute;
     top: 0;
     width: calc(100% - 32px);
-    display: grid;
-    grid-template-columns: 0.1fr 0.6fr 0.3fr;
     padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
 }
 
 .chat-screen .profile-pic {
     padding: 0;
     margin: 0;
-    height: 38px;
-    width: 38px;
+    height: 40px;
+    width: 40px;
 }
 
-.msg-box {
-    height: 100vh;
-    width: 100%;
-    background-image: url(./images/chat-background.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-    /* display: none; */
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-.chat-screen .footer {
-    padding: 10px 16px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: calc(100% - 32px);
+.chat-screen .left, .chat-screen .right {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 15px;
+}
+
+.chat-screen .header .right .drop {
+    border-radius: 20px;
+    /* border: 1px solid #A2ACB2; */
+    border: none;
+}
+
+.chat-screen .header .right .drop img{
+    height: 18px;
+    width: 18px;
+}
+
+.chat-screen .right .btns {
+    gap: 15px;
 }
 
 .chat-screen .btns {
@@ -629,6 +626,78 @@ img.open {
     width: 26px;
 }
 
+.msg-box {
+    height: calc(100% - 120px);
+    margin-top: 60px;
+    margin-bottom: 60px;
+    width: calc(100% -30px);
+    background-image: url(./images/chat-background.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 60px;
+}
+
+.chat-screen .date-day {
+    background-color: #FFFFFF;
+    padding: 5px 12px 6px 12px;
+    display: inline-block;
+    border-radius: 8px;
+}
+
+.chat-screen .date-day h4 {
+    font-size: 13px;
+    line-height: 21px;
+    color: #54656F;
+    font-weight: 400;
+    margin: 0;
+}
+
+.chat-screen .msg {
+    z-index: 10;
+    border-radius: 8px;
+}
+
+.chat-screen .msg img {
+    display: none;
+}
+
+.chat-screen .msg:hover .chat-screen .msg img {
+    display: block;
+}
+
+.chat-screen .msg.sent {
+    background-color: #D9FDD3;
+}
+
+.chat-screen .msg.recieved {
+    background-color: #FFFFFF;
+}
+
+.chat-screen .msg-text {
+    font-size: 14px;
+    line-height: 19px;
+    color: black;
+    font-weight: 400;
+}
+
+.chat-screen .footer {
+    padding: 10px 16px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: calc(100% - 32px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+}
+
+.footer .type-msg {
+    width: 86%;
+}
+
 .footer input {
     border: none;
     outline: none;
@@ -638,5 +707,5 @@ img.open {
     font-size: 15px;
     font-weight: 400;
     line-height: 22px;
-    width: 700px;
+    width: 96%;
 }
