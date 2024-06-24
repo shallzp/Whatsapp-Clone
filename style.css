@@ -22,6 +22,7 @@ body {
 }
 
 #app {
+    min-height: 100vh;
     display: flex;
     flex-direction: row;
     padding: 0;
@@ -626,6 +627,7 @@ img.open {
     width: 26px;
 }
 
+
 .msg-box {
     height: calc(100% - 120px);
     margin-top: 60px;
@@ -637,13 +639,36 @@ img.open {
     overflow-y: auto;
     overflow-x: hidden;
     padding: 0 60px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.chat-screen .date-day, .chat-screen .msg {
+    display: inline-flex;
+    background-color: #FFFFFF;
+    padding: 5px 12px 6px 12px;
+    border-radius: 8px;
+    box-shadow: 0 1px .5px rgba(0, 0, 0, .13);
+    position: relative;
+    align-items: center;
+    white-space: nowrap;
+    z-index: 10;
+    max-width: fit-content;
 }
 
 .chat-screen .date-day {
-    background-color: #FFFFFF;
-    padding: 5px 12px 6px 12px;
-    display: inline-block;
-    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+}
+
+.chat-screen .on-top {
+    position: absolute;
+    top: 10px;
+    left: 44.5%;
+    z-index: 20;
 }
 
 .chat-screen .date-day h4 {
@@ -655,24 +680,34 @@ img.open {
 }
 
 .chat-screen .msg {
-    z-index: 10;
-    border-radius: 8px;
+    padding: 6px 7px 8px 9px !important;
 }
 
-.chat-screen .msg img {
-    display: none;
-}
-
-.chat-screen .msg:hover .chat-screen .msg img {
-    display: block;
-}
-
-.chat-screen .msg.sent {
+.msg.sent {
     background-color: #D9FDD3;
+    margin-left: auto;
 }
 
-.chat-screen .msg.recieved {
+.msg.sent .msg-text{
+    padding: 0 70px 0 0;
+}
+
+.msg.recieved {
     background-color: #FFFFFF;
+    margin-right: auto;
+}
+
+.msg.recieved .msg-text{
+    padding: 0 50px 0 0;
+}
+
+.chat-screen .msg .right-bottom {
+    position: absolute;
+    bottom: 3px;
+    right: 6px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .chat-screen .msg-text {
@@ -680,7 +715,30 @@ img.open {
     line-height: 19px;
     color: black;
     font-weight: 400;
+    margin: 0;
 }
+
+.chat-screen .msg .right-bottom img {
+    height: 15px;
+    width: 15px;
+}
+
+.chat-screen .msg .time {
+    color: #54656F;
+    font-size: 11px;
+    line-height: 15px;
+}
+
+.chat-screen .msg .img-hover {
+    display: none;
+    height: 20px;
+    width: 20px;
+}
+
+.chat-screen .msg:hover .chat-screen .msg img {
+    display: block;
+}
+
 
 .chat-screen .footer {
     padding: 10px 16px;
