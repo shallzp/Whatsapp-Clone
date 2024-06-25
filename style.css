@@ -28,6 +28,7 @@ body {
     flex-direction: row;
     padding: 0;
     margin: 0;
+    position: relative;
 }
 
 .vertical-divider {
@@ -59,6 +60,9 @@ body {
     height: 40px;
     width: 40px;
     background-color: #D9DBDF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #nav img, .heading img {
@@ -519,7 +523,7 @@ img.open {
     align-items: center;
     justify-content: center;
     color: #54656F;
-    display: none;
+    /* display: none; */
 }
 
 .default img {
@@ -576,6 +580,7 @@ img.open {
     height: 100%;
     width: calc(100%);
     position: relative;
+    display: none;
 }
 
 .chat-screen .header {
@@ -603,10 +608,13 @@ img.open {
 }
 
 .chat-screen .header .right button {
-    border-radius: 20px;
+    border-radius: 4px;
     border: 1px solid #A2ACB2;
     /* border: none; */
     padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .chat-screen .header .right button img{
@@ -642,7 +650,7 @@ img.open {
     height: calc(100% - 120px);
     margin-top: 60px;
     margin-bottom: 60px;
-    background-image: url(./images/chat-background.png);
+    background-image: url(./images/background-cream.png);
     background-repeat: no-repeat;
     background-size: cover;
     overflow-y: auto;
@@ -894,3 +902,72 @@ img.open {
 
 
 /* 1300 se niche me search pura occupy krr lega aur details hide ho jaega */
+
+
+
+
+.call {
+    z-index: 50;
+    position: absolute;
+    top: 50px;
+    left: 100px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    display: none;
+}
+
+.call .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.call .bg {
+    background-image: url(./images/background-cream.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 8px;
+    margin: 0 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* color: #FFFFFF ; */
+    padding: 0 100px;
+}
+
+.vedio-screen {
+    height: 200px;
+}
+
+#webcam {
+    width: inherit;
+    height: inherit;
+    transform: scaleX(-1);
+    border-radius: 8px !important;
+}
+
+.call .footer .btns{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px;
+}
+
+.call .footer img {
+    height: 30px;
+    width: 30px;
+}
+
+.end-call {
+    background-color: rgb(223, 20, 20);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    padding: 5px 15px;
+}

@@ -336,8 +336,8 @@
                     </div>
                     <div class="right">
                         <button>
-                            <img src="./images/icons/video.png">
-                            <img src="./images/icons/down.png">
+                            <img src="./images/icons/video.png" onclick="startVideoCall()">
+                            <img src="./images/icons/voice.png" onclick="startVoiceCall()">
                         </button>
                         <div class="btns">
                             <img src="./images/icons/search.png" class="search-chat">
@@ -460,6 +460,52 @@
 
             <div class="content white-bg">
                 <p class="comment">Search for messages with Shalini Patel.</p>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="call default-bg" style="display: none;">
+            <div class="header"></div>
+
+
+            <div class="bg">
+                <div class="profile-pic">
+                    <img src="./images/icons/user.png" alt="User">
+                </div>
+
+                <p>Shalini Patel</p>
+                <p class="current-msg">Ringing...</p>
+
+                <div class="vedio-screen">
+                    <video id="webcam" autoplay></video>
+                </div>
+            </div>
+
+
+            <div class="footer">
+                <div class="btns">
+                    <div class="active">
+                        <img src="./images/icons/add-user.png">
+                    </div>
+                    <div class="active">
+                        <img src="./images/icons/screenshare.png">
+                    </div>
+                    <div class="active">
+                        <img src="./images/icons/video-on.png">
+                    </div>
+                    <div class="active">
+                        <img src="./images/icons/mic-on.png">
+                    </div>
+                    <div class="active">
+                        <img src="./images/icons/hori-menu.png">
+                    </div>
+                    <div class="end-call">
+                        <img src="./images/icons/disconnect.png">
+                    </div>
+                </div>
             </div>
         </div>
     </div>

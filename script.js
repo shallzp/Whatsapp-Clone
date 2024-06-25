@@ -15,12 +15,19 @@ $("#master .heading img").each(function(index) {
 });
 
 
-$("#master .chat-room .chat").each(function() {
+$("#master .chat-room .chat .open").each(function() {
     $(this).on("click", function() {
         $(".chat .menu-contact").toggle();
     });
 });
 
+
+$("#master .chat-room .chat").each(function() {
+    $(this).on("click", function() {
+        $("#details .default").hide();
+        $("#details .chat-screen").show();
+    });
+});
 
 
 
@@ -96,3 +103,40 @@ $(".msg-row .menu-hover").each(function() {
         $(this).siblings(".menu").toggle();
     });
 });
+
+
+
+//Call
+function startVoiceCall() {
+    $(".call").show();
+}
+
+function startVideoCall() {
+    $(".call").show();
+
+    let accessDevice = navigator.mediaDevices;
+
+    if (!accessDevice || !accessDevice.getUserMedia) {
+        console.log("getUserMedia() not supported.");
+        return;
+    }
+
+    accessDevice.getUserMedia({
+        audio: true,
+        video: true
+    })
+    .then(function(vidStream) {
+        var video = $("#webcam")[0];
+        if ("srcObject" in video) {
+            video.srcObject = vidStream;
+        } else {
+            video.src = window.URL.createObjectURL(vidStream);
+        }
+        video.onloadedmetadata = function(e) {
+            video.play();
+        };
+    })
+    .catch(function(e) {
+        console.log(e.name + ": " + e.message);
+    });
+}
