@@ -696,7 +696,7 @@ img.open-menu {
 
 .msg {
     padding: 6px 7px 8px 9px !important;
-    max-width: 300px; 
+    max-width: 500px; 
 }
 
 .msg.sent {
@@ -732,7 +732,7 @@ img.open-menu {
     color: black;
     font-weight: 400;
     margin: 0;
-    max-width: 300px;
+    max-width: 500px;
     word-break: break-word;
 }
 
@@ -840,7 +840,7 @@ img.open-menu {
 
 
 /* Search Tab */
-.search-tab {
+.search-tab, .profile-info {
     min-width: calc((100vw - 29vw - 60px)/3);
     display: none;
 }

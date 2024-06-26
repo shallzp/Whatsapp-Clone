@@ -1,7 +1,7 @@
 const whatsapp_log = {
     users: [{
-        phone_no: "",
         name: "Shalini",
+        phone_no: "",
         about: "Busy",
         profile_pic: "./images/data/shalini.png",
         contacts: [{

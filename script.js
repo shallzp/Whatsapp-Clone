@@ -175,6 +175,11 @@ function DetailsChange(type, index) {
 
     $("#details").html(createChatHTML(data, type));
 
+    $(".chat-screen .header .left").on("click", function() {
+        $("profile-info").show();
+        $("#details").css("width", "calc((100vw - 29vw - 60px)/2 + 42px)");
+    });
+
     $(".search-chat").on("click", function() {
         $(this).toggleClass("clicked");
         $(".search-tab").show();
