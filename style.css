@@ -16,7 +16,7 @@
 }
 
 body {
-    /* overflow: hidden; */
+    overflow: overlay;
     padding: 0;
     margin: 0;
 }
@@ -288,7 +288,7 @@ img.back, img.cancel {
     background-color: rgb(240, 242, 245, 0.6);
 }
 
-.chat:hover img.open {
+.chat:hover img.open-menu {
     display: block;
 }
 
@@ -358,7 +358,7 @@ img.tick {
     margin-left: 20px;
 }
 
-img.open {
+img.open-menu {
     position: absolute;
     top: 38px;
     right: 15px;
@@ -523,7 +523,6 @@ img.open {
     align-items: center;
     justify-content: center;
     color: #54656F;
-    /* display: none; */
 }
 
 .default img {
@@ -580,7 +579,6 @@ img.open {
     height: 100%;
     width: calc(100%);
     position: relative;
-    display: none;
 }
 
 .chat-screen .header {
@@ -610,7 +608,6 @@ img.open {
 .chat-screen .header .right button {
     border-radius: 4px;
     border: 1px solid #A2ACB2;
-    /* border: none; */
     padding: 6px 10px;
     display: flex;
     align-items: center;
@@ -647,7 +644,7 @@ img.open {
 
 
 .msg-box {
-    height: calc(100% - 120px);
+    height: calc(100vh - 145px);
     margin-top: 60px;
     margin-bottom: 60px;
     background-image: url(./images/background-cream.png);
@@ -655,16 +652,16 @@ img.open {
     background-size: cover;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 0 60px;
-    position: relative;
+    padding: 12px 60px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
     align-items: center;
 }
 
 .msg-row {
     display: flex;
+    justify-content: flex-start;
     background-color: transparent;
     width: 100%;
 }
@@ -677,14 +674,14 @@ img.open {
     box-shadow: 0 1px .5px rgba(0, 0, 0, .13);
     position: relative;
     align-items: center;
-    white-space: nowrap;
+    /* white-space: nowrap; */
     z-index: 10;
     max-width: fit-content;
 }
 
 .on-top {
     position: absolute;
-    top: 10px;
+    top: 70px;
     left: 44.5%;
     z-index: 20;
 }
@@ -699,6 +696,7 @@ img.open {
 
 .msg {
     padding: 6px 7px 8px 9px !important;
+    max-width: 300px; 
 }
 
 .msg.sent {
@@ -734,6 +732,8 @@ img.open {
     color: black;
     font-weight: 400;
     margin: 0;
+    max-width: 300px;
+    word-break: break-word;
 }
 
 .msg .right-bottom img {
@@ -909,19 +909,53 @@ img.open {
 .call {
     z-index: 50;
     position: absolute;
-    top: 50px;
-    left: 100px;
+    top: 10px;
+    left: 250px;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 8px;
     display: none;
+    min-height: 525px;
+    min-width: 850px;
 }
 
 .call .header {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    gap : 26.6%;
+    padding: 12px;
+}
+
+.call .left, .call .right, .call .center {
+    display: flex;
+    align-items: center;
+}
+
+.call .left img, .call .right img {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+}
+
+.call .center {
+    color: #54656F;
+    font-size: 13px;
+}
+
+.call .center img {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;  
+}
+
+.call .right .btns {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: right;
+    gap: 20px;
 }
 
 .call .bg {
@@ -929,17 +963,34 @@ img.open {
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 8px;
-    margin: 0 12px;
+    margin: 48px 12px 0 12px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* color: #FFFFFF ; */
-    padding: 0 100px;
+    padding: 10px 100px;
+    min-height: calc(525px - 128px);
+}
+
+.call .bg .profile-pic {
+    width: 80px;
+    height: 80px;
+    border-radius: 50px;
+    margin: 0;
+}
+
+.call .bg p {
+    margin: 10px;
+}
+
+.call .bg .name {
+    font-size: 19px;
+    font-weight: 450;
 }
 
 .vedio-screen {
-    height: 200px;
+    width: 330px;
+    margin-top: 10px;
 }
 
 #webcam {
