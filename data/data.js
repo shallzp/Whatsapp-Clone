@@ -1,12 +1,12 @@
 const whatsapp_log = {
     users: [{
         name: "Shalini",
-        phone_no: "",
+        id: "",
         about: "Busy",
         profile_pic: "./images/data/shalini.png",
         contacts: [{
             name: "Sahil",
-            phone_no: "",
+            id: "",
             profile_pic: "./data/profiles/sahil.png",
             about : "Hey! I am using WhatsApp.",
             starred_msgs : [],
@@ -16,7 +16,11 @@ const whatsapp_log = {
                 msg: "Good Morning",
                 type: "sent",
                 attachments: false,
-                situation: "read"
+                situation: "read",
+                images: [],
+                videos: [],
+                documents: [],
+                links: [],
             },
             {
                 date: "26-06-2024",
@@ -24,7 +28,11 @@ const whatsapp_log = {
                 msg: "Good Morning",
                 type: "recieved",
                 attachments: false,
-                situation: "read"
+                situation: "read",
+                images: [],
+                videos: [],
+                documents: [],
+                links: [],
             },
             {
                 date: "26-06-2024",
@@ -32,7 +40,11 @@ const whatsapp_log = {
                 msg: "What are you doing?",
                 type: "sent",
                 attachments: false,
-                situation: "read"
+                situation: "read",
+                images: [],
+                videos: [],
+                documents: [],
+                links: [],
             },
             {
                 date: "26-06-2024",
@@ -40,7 +52,11 @@ const whatsapp_log = {
                 msg: "Just woke up",
                 type: "recieved",
                 attachments: false,
-                situation: "read"
+                situation: "read",
+                images: [],
+                videos: [],
+                documents: [],
+                links: [],
             },
             {
                 date: "26-06-2024",
@@ -48,7 +64,11 @@ const whatsapp_log = {
                 msg: "WBU?",
                 type: "recieved",
                 attachments: false,
-                situation: "read"
+                situation: "read",
+                images: [],
+                videos: [],
+                documents: [],
+                links: [],
             },
             {
                 date: "26-06-2024",
@@ -56,7 +76,11 @@ const whatsapp_log = {
                 msg: "Eating Breakfast",
                 type: "sent",
                 attachments: false,
-                situation: "read"
+                situation: "read",
+                images: [],
+                videos: [],
+                documents: [],
+                links: [],
             },
             {
                 date: "26-06-2024",
@@ -64,7 +88,11 @@ const whatsapp_log = {
                 msg: "Okay",
                 type: "recieved",
                 attachments: false,
-                situation: "read"
+                situation: "read",
+                images: [],
+                videos: [],
+                documents: [],
+                links: [],
             },
             {
                 date: "26-06-2024",
@@ -72,7 +100,11 @@ const whatsapp_log = {
                 msg: "What are you eating?",
                 type: "recieved",
                 attachments: false,
-                situation: "read"
+                situation: "read",
+                images: [],
+                videos: [],
+                documents: [],
+                links: [],
             },
             {
                 date: "26-06-2024",
@@ -80,7 +112,11 @@ const whatsapp_log = {
                 msg: "Parathas",
                 type: "sent",
                 attachments: false,
-                situation: "read"
+                situation: "read",
+                images: [],
+                videos: [],
+                documents: [],
+                links: [],
             },
             {
                 date: "26-06-2024",
@@ -88,7 +124,11 @@ const whatsapp_log = {
                 msg: "Okay Bye I've gotta go",
                 type: "sent",
                 attachments: false,
-                situation: "read"
+                situation: "read",
+                images: [],
+                videos: [],
+                documents: [],
+                links: [],
             },
             {
                 date: "26-06-2024",
@@ -96,7 +136,11 @@ const whatsapp_log = {
                 msg: "Bye",
                 type: "recieved",
                 attachments: false,
-                situation: "read"
+                situation: "read",
+                images: [],
+                videos: [],
+                documents: [],
+                links: [],
             },
             {
                 date: "26-06-2024",
@@ -104,7 +148,38 @@ const whatsapp_log = {
                 msg: "Students interested in joining the Student Council should fill out the form by 11 a.m. on June 21, 2024. Interviews for shortlisted candidates will be held on June 22, 2024.",
                 type: "recieved",
                 attachments: false,
-                situation: "read"
+                situation: "read",
+                images: [],
+                videos: [],
+                documents: [],
+                links: [],
+            },
+            {
+                date: "27-06-2024",
+                time: "03:22 PM",
+                msg: "See what I've got.",
+                type: "recieved",
+                attachments: true,
+                situation: "read",
+                images: [{
+                    path: "./data/attachments/images/1.png"
+                }],
+                videos: [],
+                documents: [],
+                links: [],
+            },
+            {
+                date: "27-06-2024",
+                time: "03:22 PM",
+                type: "sent",
+                attachments: true,
+                situation: "unread",
+                images: [],
+                videos: [{
+                    path: "./data/attachments/vedios/1.mp4"
+                }],
+                documents: [],
+                links: [],
             }],
             call_log: [{
                 date: "26-06-2024",
@@ -112,7 +187,17 @@ const whatsapp_log = {
                 duration: "00:59",
                 call_type: "voice"
             }]
-        }],
+        },
+        // {
+        //     name: "Anshu",
+        //     id: "",
+        //     profile_pic: false,
+        //     about: "",
+        //     starred_msgs: "",
+        //     chat_log: [],
+        //     call_log: []
+        // }
+        ],
         groups: [{
             name: "OFFICIAL MBATECH - BTECH",
             profile_pic: false,
@@ -124,6 +209,10 @@ const whatsapp_log = {
                 type: "sent",
                 attachments: false,
                 situation: "unread",
+                images: [],
+                videos: [],
+                documents: [],
+                links: [],
                 by: ""
             }],
             call_log: []

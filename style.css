@@ -235,10 +235,6 @@ img.back, img.cancel {
     font-weight: 400;
 }
 
-/* .search input:focus img.back{
-    display: block;
-} */
-
 .filter-btns {
     margin: 0 12px;
     padding: 2px 0 6px 0;
@@ -282,6 +278,14 @@ img.back, img.cancel {
     color: #54656F;
     cursor: pointer;
     position: relative;
+}
+
+.chat .attach {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    margin-left: 22px;
 }
 
 .chat:hover {
@@ -506,7 +510,6 @@ img.open-menu {
 
 /* Detail */
 #details {
-    /* min-width: calc((100vw - 29vw - 60px)/2 + 42px); */
     width: calc(100vw - 29vw - 60px);
     display: flex;
     flex-direction: column;
@@ -669,14 +672,16 @@ img.open-menu {
 .date-day, .msg {
     display: inline-flex;
     background-color: #FFFFFF;
-    padding: 5px 12px 6px 12px;
     border-radius: 8px;
     box-shadow: 0 1px .5px rgba(0, 0, 0, .13);
     position: relative;
     align-items: center;
-    /* white-space: nowrap; */
     z-index: 10;
     max-width: fit-content;
+}
+
+.date-day {
+    padding: 5px 12px 6px 12px;
 }
 
 .on-top {
@@ -695,8 +700,22 @@ img.open-menu {
 }
 
 .msg {
-    padding: 6px 7px 8px 9px !important;
     max-width: 500px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.msg img[src = "./images/icons/down.png"] {
+    height: 30px;
+    width: 30px;
+}
+
+.msg .attachment {
+    width: calc(100% - 6px);
+    max-height: 300px;
+    border-radius: inherit;
+    margin: 3px;
 }
 
 .msg.sent {
@@ -727,6 +746,7 @@ img.open-menu {
 }
 
 .msg-text {
+    margin: 6px 7px 8px 9px !important;
     font-size: 14px;
     line-height: 19px;
     color: black;

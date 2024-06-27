@@ -76,9 +76,82 @@ $("#master .heading img").each(function(index) {
     });
 });
 
+// function createChatListHTML(chat, type, index) {
+//     const chatlogs = chat.chat_log;
+//     const dataIndex = type === 'group' ? `group-index="${index}"` : `contact-index="${index}"`;
+
+//     return `
+//     <div class="chat ${type}" ${dataIndex}>
+//         ${chat.profile_pic ? 
+//             `<div class="profile-pic" style="background-image: url(${chat.profile_pic}); background-repeat: no-repeat; background-size: cover;"></div>` :
+//             `<div class="profile-pic user">
+//                 <img src="./images/icons/${type === 'group' ? 'group-user' : 'user'}.png" class="user">
+//             </div>`
+//         }
+//         <div class="preview">
+//             <div class="content">
+//                 <div class="info">
+//                     <div class="top">
+//                         <h3 class="contact-name">${chat.name}</h3>
+//                         <div class="date-time">${chatlogs[chatlogs.length - 1].date}</div>
+//                     </div>
+//                     ${chatlogs[chatlogs.length - 1].type === 'sent' ? 
+//                         `<img src="./images/icons/${chatlogs[chatlogs.length - 1].situation}.png" class="tick">
+//                         <p> ${chatlogs[chatlogs.length - 1].msg.length > 35 ? chatlogs[chatlogs.length - 1].msg.substring(0, 35) + "..." : chatlogs[chatlogs.length - 1].msg} </p>` :
+//                         `<p style="margin: 0;">${chatlogs[chatlogs.length - 1].msg.length > 35 ? chatlogs[chatlogs.length - 1].msg.substring(0, 35) + "..." : chatlogs[chatlogs.length - 1].msg}</p>`
+//                     }                    
+//                     <img src="./images/icons/open.png" class="open-menu">
+//                 </div>
+//             </div>
+//             <div class="horizontal-divider default-bg"></div>
+//         </div>
+//         <div class="menu ${type} white-bg">
+//             <ul>
+//                 ${type === 'group' ? `
+//                 <li>Archive chat</li>
+//                 <li>Mute notifications</li>
+//                 <li>Exit group</li>
+//                 ` : `
+//                 <li>Delete chat</li>
+//                 <li>Block</li>
+//                 `}
+//                 <li>Pin chat</li>
+//                 <li>Mark as unread</li>
+//             </ul>
+//         </div>
+//     </div>
+//     `;
+// }
+
 function createChatListHTML(chat, type, index) {
     const chatlogs = chat.chat_log;
     const dataIndex = type === 'group' ? `group-index="${index}"` : `contact-index="${index}"`;
+    let contentHTML = '';
+
+    if (chatlogs[chatlogs.length - 1].attachments) {
+        if (chatlogs[chatlogs.length - 1].images && chatlogs[chatlogs.length - 1].images.length > 0) {
+            contentHTML = `
+                <div class="attach">
+                    <img src="./images/icons/image.png"> Photo
+                </div>`;
+        } 
+        else if (chatlogs[chatlogs.length - 1].videos && chatlogs[chatlogs.length - 1].videos.length > 0) {
+            contentHTML = `
+                <div class="attach">
+                    <img src="./images/icons/video.png"> Video
+                </div>`;
+        } 
+        else if (chatlogs[chatlogs.length - 1].documents && chatlogs[chatlogs.length - 1].documents.length > 0) {
+            contentHTML = `
+                <div class="attach">
+                    <img src="./images/icons/document.png"> Document
+                </div>`;
+        }
+    } 
+    else {
+        contentHTML = `
+            <p>${chatlogs[chatlogs.length - 1].msg.length > 35 ? chatlogs[chatlogs.length - 1].msg.substring(0, 35) + "..." : chatlogs[chatlogs.length - 1].msg}</p>`;
+    }
 
     return `
     <div class="chat ${type}" ${dataIndex}>
@@ -93,13 +166,12 @@ function createChatListHTML(chat, type, index) {
                 <div class="info">
                     <div class="top">
                         <h3 class="contact-name">${chat.name}</h3>
-                        <div class="date-time">${chatlogs[chatlogs.length - 1].date}</div>
+                        <div class="date-time">${chatlogs.length > 0 ? chatlogs[chatlogs.length - 1].date : ''}</div>
                     </div>
                     ${chatlogs[chatlogs.length - 1].type === 'sent' ? 
-                        `<img src="./images/icons/${chatlogs[chatlogs.length - 1].situation}.png" class="tick">
-                        <p> ${chatlogs[chatlogs.length - 1].msg.length > 35 ? chatlogs[chatlogs.length - 1].msg.substring(0, 35) + "..." : chatlogs[chatlogs.length - 1].msg} </p>` :
-                        `<p style="margin: 0;">${chatlogs[chatlogs.length - 1].msg.length > 35 ? chatlogs[chatlogs.length - 1].msg.substring(0, 35) + "..." : chatlogs[chatlogs.length - 1].msg}</p>`
-                    }                    
+                        `<img src="./images/icons/${chatlogs[chatlogs.length - 1].situation}.png" class="tick">` : ''
+                    }
+                    ${contentHTML}
                     <img src="./images/icons/open.png" class="open-menu">
                 </div>
             </div>
@@ -122,6 +194,7 @@ function createChatListHTML(chat, type, index) {
     </div>
     `;
 }
+
 
 
 function masterChatLogs() {
@@ -198,11 +271,37 @@ function DetailsChange(type, index) {
 
 function createMessageHTML(log, chat_type) {
     const situationImg = log.situation ? `<img src="./images/icons/${log.situation}.png">` : '';
+    let attachmentHTML = '';
+    let messageTextHTML = log.msg ? `<p class="msg-text">${log.msg}</p>` : '';
+
+    if (log.attachments) {
+        if (log.images && log.images.length > 0) {
+            log.images.forEach(image => {
+                attachmentHTML += `<img src="${image.path}" class="attachment">`;
+            });
+        } 
+        if (log.videos && log.videos.length > 0) {
+            log.videos.forEach(video => {
+                attachmentHTML += `<video src="${video.path}" class="attachment" controls autoplay mute></video>`;
+            });
+        } 
+        if (log.documents && log.documents.length > 0) {
+            log.documents.forEach(document => {
+                attachmentHTML += `<a href="${document.path}" class="attachment" download>${document.name}</a>`;
+            });
+        }
+        if (log.links && log.links.length > 0) {
+            log.links.forEach(link => {
+                attachmentHTML += `<a href="${link.url}" class="attachment" target="_blank">${link.name}</a>`;
+            });
+        }
+    }
 
     return `
     <div class="msg-row ${log.type}">
         <div class="msg ${log.type}">
-            <p class="msg-text">${log.msg}</p>
+            ${attachmentHTML}
+            ${messageTextHTML}
             <div class="right-bottom">
                 <span class="time">${log.time}</span>
                 ${log.type === 'sent' ? situationImg : ''}
@@ -372,7 +471,7 @@ $(".call .header .close").click(function() {
 //For closing extra windows
 function close(element) {
     $(element).hide();
-};
+}
 
 
 
@@ -470,10 +569,11 @@ function initProfileInfo(chat) {
     </div>
     `;
 
-    $(".profile-info").empty().append(profileHTML);
+    $(".profile-info").html(profileHTML);
 
     $(".profile-info .profile-header .close").click(function() {
         close($(this).closest(".profile-info"));
+        $("#details").css("width", "calc(100vw - 29vw - 60px)");
     });
 }
 
@@ -482,7 +582,7 @@ function initProfileInfo(chat) {
 
 // Search tab
 function initSearchTab(chat) {
-    searchHTML = `
+    const searchHTML = `
     <div class="search-header white-bg">
         <div class="heading">
             <img src="./images/icons/cancel.png" class="close">
@@ -506,9 +606,10 @@ function initSearchTab(chat) {
     </div>
     `;
 
-    $(".search-tab").empty().append(searchHTML);
+    $(".search-tab").html(searchHTML);
 
     $(".search-tab .search-header .close").click(function() {
         close($(this).closest(".search-tab"));
+        $("#details").css("width", "calc(100vw - 29vw - 60px)");
     });
 }
