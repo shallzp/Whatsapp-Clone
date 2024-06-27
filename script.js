@@ -505,7 +505,15 @@ function initProfileInfo(chat) {
             <span>n <img src="./images/icons/next.png"></span>
         </div>
         <div class="media-row">
-            <img src="./data/attachments/images/1.png">
+            <div class="attach default-bg">
+                <img src="./data/attachments/images/1.png">
+            </div>
+            <div class="attach default-bg">
+                <img src="./data/attachments/images/1.png">
+            </div>
+            <div class="attach default-bg">
+                <img src="./data/attachments/images/1.png">
+            </div>
         </div>
     </div>
 

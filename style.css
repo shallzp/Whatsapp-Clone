@@ -963,6 +963,19 @@ img.open-menu {
 .profile-info .media .media-row {
     display: flex;
     gap: 10px;
+    padding: 0 20px;
+}
+
+.media-row .attach {
+    max-height: 87px;
+    max-width: 95px;
+    padding: 2px;
+    border-radius: 3px;
+}
+
+.media-row .attach img {
+    width: 100%;
+    height: 100%;
 }
 
 .profile-info .info .row {
@@ -1006,7 +1019,7 @@ img.open-menu {
     height: 22px;
     width: 22px;
     left: 0;
-    bottom: -2.5px;
+    bottom: -3px;
     background-color: #D9DBDF;
     -webkit-transition: .4s;
     transition: .4s;
@@ -1017,9 +1030,9 @@ img.open-menu {
 }
 
 .row input:checked + .slider:before {
-    -webkit-transform: translateX(16px);
-    -ms-transform: translateX(16px);
-    transform: translateX(16px);
+    -webkit-transform: translateX(14px);
+    -ms-transform: translateX(14px);
+    transform: translateX(14px);
     background-color: #008069;
 }
 
