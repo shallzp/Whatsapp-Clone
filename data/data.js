@@ -8,6 +8,8 @@ const whatsapp_log = {
             name: "Sahil",
             phone_no: "",
             profile_pic: "./data/profiles/sahil.png",
+            about : "Hey! I am using WhatsApp.",
+            starred_msgs : [],
             chat_log: [{
                 date: "26-06-2024",
                 time: "10:18 AM",

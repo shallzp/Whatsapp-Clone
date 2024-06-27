@@ -176,12 +176,14 @@ function DetailsChange(type, index) {
     $("#details").html(createChatHTML(data, type));
 
     $(".chat-screen .header .left").on("click", function() {
-        $("profile-info").show();
+        initProfileInfo(data);
+        $(".profile-info").show();
         $("#details").css("width", "calc((100vw - 29vw - 60px)/2 + 42px)");
     });
 
     $(".search-chat").on("click", function() {
         $(this).toggleClass("clicked");
+        $(".search-tab").append(initSearchTab(data));
         $(".search-tab").show();
         $("#details").css("width", "calc((100vw - 29vw - 60px)/2 + 42px)");
     });
@@ -369,6 +371,144 @@ $(".call .header .close").click(function() {
 
 //For closing extra windows
 function close(element) {
-    // $(element).empty();
     $(element).hide();
 };
+
+
+
+
+//Profile info
+function initProfileInfo(chat) {
+    profileHTML = `
+    <div class="profile-header white-bg">
+        <div class="heading">
+            <img src="./images/icons/cancel.png" class="close">
+            <p>Contact Info</p>
+        </div>
+        ${chat.profile_pic ? 
+            `<div class="profile-pic" style="background-image: url(${chat.profile_pic}); background-repeat: no-repeat; background-size: cover;"></div>` :
+            `<div class="profile-pic">
+                <img src="./images/icons/${type === 'group' ? 'group-user' : 'user'}.png" class="user">
+            </div>`
+        }
+        <div class="contact-name">${chat.name}</div>
+        <div class="number"></div>
+    </div>
+
+    <div class="about white-bg">
+        <div class="head"><span>About</span></div>
+        <p class="about-them">${chat.about}</p>
+    </div>
+
+    <div class="media white-bg">
+        <div class="head">
+            <span>Media, links and docs</span>
+            <span>n <img src="./images/icons/next.png"></span>
+        </div>
+        <div class="media-row">
+            <img src="./data/attachments/images/1.png">
+        </div>
+    </div>
+
+    <div class="info white-bg">
+        <div class="row">
+            <div class="left">
+                <img src="./images/icons/star.png">
+                <p>Starred messages</p>
+            </div>
+            <img src="./images/icons/next.png">
+        </div>
+        <div class="horizontal-divider default-bg"></div>
+        <div class="row">
+            <div class="left">
+                <img src="./images/icons/bell.png">
+                <p>Mute notifications</p>
+            </div>
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <div class="row">
+            <div class="left">
+                <img src="./images/icons/timer.png">
+                <div>
+                    <p>Disappearing messages</p>
+                    <p class="small">Off</p>
+                </div>
+            </div>
+            <img src="./images/icons/next.png">
+        </div>
+        <div class="row">
+            <div class="left">
+                <img src="./images/icons/lock.png">
+                <div>
+                    <p>Encryption</p>
+                    <p class="small">Messages are end-to-end encrypted. Click to verify.</p>
+                </div>
+            </div>
+        </div>
+        <div class="horizontal-divider default-bg"></div>
+
+        <div class="head">n groups in common</div>
+        <div class="group-row"></div>
+    </div>
+
+    <div class="options white-bg">
+        <div class="row">
+            <img src="./images/icons/block.png">
+            <p>Block ${chat.name}</p>
+        </div>
+        <div class="row">
+            <img src="./images/icons/report.png">
+            <p>Report ${chat.name}</p>
+        </div>
+        <div class="row">
+            <img src="./images/icons/delete.png">
+            <p>Delete chat</p>
+        </div>
+    </div>
+    `;
+
+    $(".profile-info").empty().append(profileHTML);
+
+    $(".profile-info .profile-header .close").click(function() {
+        close($(this).closest(".profile-info"));
+    });
+}
+
+
+
+
+// Search tab
+function initSearchTab(chat) {
+    searchHTML = `
+    <div class="search-header white-bg">
+        <div class="heading">
+            <img src="./images/icons/cancel.png" class="close">
+            <p>Search messages</p>
+        </div>
+        <div class="filter">
+            <img src="./images/icons/calendar.png">
+            <div class="search default-bg">
+                <div class="img">
+                    <img src="./images/icons/search.png" class="search-icon">
+                </div>
+                <input type="text" placeholder="Search">
+                <img src="./images/icons/cancel.png" class="cancel">
+            </div>
+        </div>
+    </div>
+    <div class="horizontal-divider default-bg"></div>
+
+    <div class="content white-bg">
+        <p class="comment">Search for messages with ${chat.name}.</p>
+    </div>
+    `;
+
+    $(".search-tab").empty().append(searchHTML);
+
+    $(".search-tab .search-header .close").click(function() {
+        close($(this).closest(".search-tab"));
+    });
+}

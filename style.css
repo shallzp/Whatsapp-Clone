@@ -839,8 +839,238 @@ img.open-menu {
 
 
 
+/* Profile info */
+.profile-info {
+    min-width: calc((100vw - 29vw - 60px)/3);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: none;
+}
+
+.profile-info p, .profile-info span {
+    margin: 0;
+    padding: 0;
+}
+
+.profile-info .head {
+    color: #54656F;
+    font-size: 15px;
+    line-height: 23px;
+}
+
+.profile-header, .profile-info .about, .profile-info .media {
+    padding: 0 30px;
+    padding-bottom: 19px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.profile-header {
+    padding-top: 28px;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-header .heading {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    width: 100%;
+    gap: 25px;
+}
+
+.profile-header img {
+    height: 24px;
+    width: 24px;
+}
+
+.profile-header .profile-pic {
+    height: 200px;
+    width: 200px;
+    border-radius: 100px;
+}
+
+.profile-header .contact-name {
+    font-size: 24px;
+    font-weight: 400;
+    color: #54656F !important;
+}
+
+.profile-header .number {
+    color: #8696A0;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.profile-info .about {
+    padding-top: 17px;
+    align-items: left;
+    justify-content: center;
+}
+
+.profile-info .about .about-them {
+    font-size: 17px;
+    line-height: 22px;
+}
+
+.profile-info .media {
+    padding-top: 17px;
+    align-items: left;
+    justify-content: center;
+}
+
+.profile-info .media .head {
+    display: flex;
+    justify-content: space-between;
+}
+
+.media .head span {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.media .head img {
+    height: 15px;
+    width: 15px;
+}
+
+.profile-info .media .media-row {
+    display: flex;
+    gap: 10px;
+}
+
+.profile-info .info .row {
+    display: flex;
+    font-size: 17px;
+    line-height: 22px;
+    color: #54656F;
+    padding: 25px 30px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.row .switch {
+    position: relative;
+    display: inline-block;
+    width: 35px;
+    height: 15px;
+}
+
+.row .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.row .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #A2ACB2;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.row .slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 0;
+    bottom: -2.5px;
+    background-color: #D9DBDF;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.row input:checked + .slider {
+    background-color: #E7FCE3;
+}
+
+.row input:checked + .slider:before {
+    -webkit-transform: translateX(16px);
+    -ms-transform: translateX(16px);
+    transform: translateX(16px);
+    background-color: #008069;
+}
+
+.row .slider.round {
+    border-radius: 20px;
+}
+
+.row .slider.round:before {
+    border-radius: 50%;
+}
+
+.row .left {
+    display: flex;
+    gap: 20px;
+    align-items: start;
+}
+
+.row .left img {
+    margin-top: 2px;
+}
+
+.row .left .small {
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.profile-info .info .row img {
+    height: 20px;
+    width: 20px;
+}
+
+.profile-info .info .row img[src="./images/icons/next.png"] {
+    height: 15px;
+    width: 15px;  
+}
+
+.profile-info .info .head {
+    padding: 17px 30px 5px 30px;
+}
+
+.profile-info .info .group-row {
+    padding: 10px 30px;
+}
+
+.profile-info .info .group-row:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.profile-info .options .row {
+    display: flex;
+    gap: 30px;
+    color:  rgb(224, 0, 56);
+    font-size: 17px;
+    line-height: 22px;
+    padding: 17px 30px;
+}
+
+.profile-info .options .row:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.profile-info .options .row img {
+    height: 24px;
+    width: 24px;
+}
+
+
+
+
 /* Search Tab */
-.search-tab, .profile-info {
+.search-tab{
     min-width: calc((100vw - 29vw - 60px)/3);
     display: none;
 }
@@ -902,6 +1132,7 @@ img.open-menu {
 
 
 /* 1300 se niche me search pura occupy krr lega aur details hide ho jaega */
+/* Same with others */
 
 
 
@@ -1015,7 +1246,7 @@ img.open-menu {
 }
 
 .end-call {
-    background-color: rgb(223, 20, 20);
+    background-color: rgb(224, 0, 56);
     display: flex;
     align-items: center;
     justify-content: center;
