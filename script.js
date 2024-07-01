@@ -76,53 +76,6 @@ $("#master .heading img").each(function(index) {
     });
 });
 
-// function createChatListHTML(chat, type, index) {
-//     const chatlogs = chat.chat_log;
-//     const dataIndex = type === 'group' ? `group-index="${index}"` : `contact-index="${index}"`;
-
-//     return `
-//     <div class="chat ${type}" ${dataIndex}>
-//         ${chat.profile_pic ? 
-//             `<div class="profile-pic" style="background-image: url(${chat.profile_pic}); background-repeat: no-repeat; background-size: cover;"></div>` :
-//             `<div class="profile-pic user">
-//                 <img src="./images/icons/${type === 'group' ? 'group-user' : 'user'}.png" class="user">
-//             </div>`
-//         }
-//         <div class="preview">
-//             <div class="content">
-//                 <div class="info">
-//                     <div class="top">
-//                         <h3 class="contact-name">${chat.name}</h3>
-//                         <div class="date-time">${chatlogs[chatlogs.length - 1].date}</div>
-//                     </div>
-//                     ${chatlogs[chatlogs.length - 1].type === 'sent' ? 
-//                         `<img src="./images/icons/${chatlogs[chatlogs.length - 1].situation}.png" class="tick">
-//                         <p> ${chatlogs[chatlogs.length - 1].msg.length > 35 ? chatlogs[chatlogs.length - 1].msg.substring(0, 35) + "..." : chatlogs[chatlogs.length - 1].msg} </p>` :
-//                         `<p style="margin: 0;">${chatlogs[chatlogs.length - 1].msg.length > 35 ? chatlogs[chatlogs.length - 1].msg.substring(0, 35) + "..." : chatlogs[chatlogs.length - 1].msg}</p>`
-//                     }                    
-//                     <img src="./images/icons/open.png" class="open-menu">
-//                 </div>
-//             </div>
-//             <div class="horizontal-divider default-bg"></div>
-//         </div>
-//         <div class="menu ${type} white-bg">
-//             <ul>
-//                 ${type === 'group' ? `
-//                 <li>Archive chat</li>
-//                 <li>Mute notifications</li>
-//                 <li>Exit group</li>
-//                 ` : `
-//                 <li>Delete chat</li>
-//                 <li>Block</li>
-//                 `}
-//                 <li>Pin chat</li>
-//                 <li>Mark as unread</li>
-//             </ul>
-//         </div>
-//     </div>
-//     `;
-// }
-
 function createChatListHTML(chat, type, index) {
     const chatlogs = chat.chat_log;
     const dataIndex = type === 'group' ? `group-index="${index}"` : `contact-index="${index}"`;
@@ -210,6 +163,7 @@ function masterChatLogs() {
         else if ($(this).attr("contact-index") !== undefined) {
             DetailsChange("contact", parseInt($(this).attr("contact-index")));
         }
+        scrollToBottom();
     });
 }
 
@@ -234,6 +188,10 @@ function defaultDetails() {
     `;
 
     $("#details").append(defaultHTML);
+}
+
+function scrollToBottom() {
+    $('.msg-box').scrollTop($('.msg-box')[0].scrollHeight);
 }
 
 function DetailsChange(type, index) {
@@ -267,7 +225,32 @@ function DetailsChange(type, index) {
     });
 
     initializeCall(data);
+
+    $(".menu-attach").on("click", function() {
+        $(this).toggleClass("clicked");
+        $(".doc-menu").toggle();
+    });
+
+    $('#send').on('keyup', function() {
+        if ($(this).val().trim().length > 0) {
+            $('.send').show();
+            $('.record').hide();
+        } else {
+            $('.send').hide();
+            $('.record').show();
+        }
+    });
+
+    $(".send").click(() => {
+        sendMessage();
+    });
 }
+
+// function addNewMessage(log) {
+//     const newMessageHTML = createMessageHTML(log);
+//     $('.msg-box').append(newMessageHTML);
+//     scrollToBottom();
+// }
 
 function createMessageHTML(log, chat_type) {
     const situationImg = log.situation ? `<img src="./images/icons/${log.situation}.png">` : '';
@@ -329,6 +312,12 @@ function createMessageHTML(log, chat_type) {
     `;
 }
 
+function sendMessage() {
+    const msg = $("#send").text().trim();
+
+    
+}
+
 const chat_date = "";
 function createChatHTML(chat, type) {
     const chatlogs = chat.chat_log.map(log => createMessageHTML(log)).join('');
@@ -381,15 +370,56 @@ function createChatHTML(chat, type) {
         </div>
 
         <div class="footer default-bg">
+            <div class="doc-menu white-bg">
+                <ul>
+                    <li>
+                        <div>
+                            <img src="./images/icons/menu-doc.png">
+                            <p>Document</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <img src="./images/icons/menu-pv.png">
+                            <p>Photos & video</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <img src="./images/icons/menu-cam.png">
+                            <p>Camera</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <img src="./images/icons/menu-user.png">
+                            <p>Contact</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <img src="./images/icons/menu-poll.png">
+                            <p>Poll</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <img src="./images/icons/menu-sticker.png">
+                            <p>New sticker</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
             <div class="btns">
                 <img src="./images/icons/emoji.png">
-                <img src="./images/icons/attach.png">
+                <img src="./images/icons/attach.png" class="menu-attach">
             </div>
             <div class="type-msg">
-                <input type="text" placeholder="Type a message" class="white-bg">
+                <input type="text" placeholder="Type a message" class="white-bg" id="send">
             </div>
             <div class="btns">
-                <img src="./images/icons/mic.png">
+                <img src="./images/icons/send.png" style="display: none;" class="send">
+                <img src="./images/icons/mic.png" class="record">
             </div>
         </div>
     </div>
@@ -431,9 +461,10 @@ function startVoiceCall() {
     $(".call").show();
 }
 
+let vidStream;
+
 function startVideoCall() {
     $(".vedio-screen").show();
-
     $(".call").show();
 
     let accessDevice = navigator.mediaDevices;
@@ -447,12 +478,13 @@ function startVideoCall() {
         audio: true,
         video: true
     })
-    .then(function(vidStream) {
+    .then(function(stream) {
+        vidStream = stream;
         var video = $("#webcam")[0];
         if ("srcObject" in video) {
-            video.srcObject = vidStream;
+            video.srcObject = stream;
         } else {
-            video.src = window.URL.createObjectURL(vidStream);
+            video.src = window.URL.createObjectURL(stream);
         }
         video.onloadedmetadata = function(e) {
             video.play();
@@ -463,9 +495,21 @@ function startVideoCall() {
     });
 }
 
+function stopCall() {
+    if (vidStream) {
+        vidStream.getTracks().forEach(track => track.stop());
+    }
+    else if (audioStream) {
+        audioStream.getTracks().forEach(track => track.stop());
+    }
+    $(".vedio-screen").hide();
+    $(".call").hide();
+}
+
 $(".call .header .close").click(function() {
-    close($(this).closest(".call"));
+    stopCall();
 });
+
 
 
 //For closing extra windows
@@ -478,6 +522,53 @@ function close(element) {
 
 //Profile info
 function initProfileInfo(chat) {
+    function countAttachments(chat) {
+        let totalImages = 0;
+        let totalVideos = 0;
+        let totalDocuments = 0;
+        let totalLinks = 0;
+    
+        chat.chat_log.forEach(log => {
+            if (log.attachments) {
+                if (log.images && log.images.length > 0) {
+                    totalImages += log.images.length;
+                }
+                if (log.videos && log.videos.length > 0) {
+                    totalVideos += log.videos.length;
+                }
+                if (log.documents && log.documents.length > 0) {
+                    totalDocuments += log.documents.length;
+                }
+                if (log.links && log.links.length > 0) {
+                    totalLinks += log.links.length;
+                }
+            }
+        });
+    
+        return (totalImages + totalVideos + totalDocuments + totalLinks);
+    }
+    
+
+    function getLastThreeMediaLogs(chatLogs) {
+        const mediaLogs = chatLogs.filter(log => log.attachments && (log.images.length > 0 || log.videos.length > 0));
+        return mediaLogs.slice(-3).reverse();
+    }
+
+    const lastThreeMediaLogs = getLastThreeMediaLogs(chat.chat_log);
+    let mediaHTML = '';
+
+    lastThreeMediaLogs.forEach(log => {
+        if (log.images && log.images.length > 0) {
+            log.images.forEach(image => {
+                mediaHTML += `<div class="attach default-bg"><img src="${image.path}"></div>`;
+            });
+        } else if (log.videos && log.videos.length > 0) {
+            log.videos.forEach(video => {
+                mediaHTML += `<div class="attach default-bg"><video src="${video.path}"></video></div>`;
+            });
+        }
+    });
+
     profileHTML = `
     <div class="profile-header white-bg">
         <div class="heading">
@@ -499,21 +590,13 @@ function initProfileInfo(chat) {
         <p class="about-them">${chat.about}</p>
     </div>
 
-    <div class="media white-bg">
+     <div class="media white-bg">
         <div class="head">
             <span>Media, links and docs</span>
-            <span>n <img src="./images/icons/next.png"></span>
+            <span>${countAttachments(chat)} <img src="./images/icons/next.png"></span>
         </div>
         <div class="media-row">
-            <div class="attach default-bg">
-                <img src="./data/attachments/images/1.png">
-            </div>
-            <div class="attach default-bg">
-                <img src="./data/attachments/images/1.png">
-            </div>
-            <div class="attach default-bg">
-                <img src="./data/attachments/images/1.png">
-            </div>
+            ${mediaHTML}
         </div>
     </div>
 
