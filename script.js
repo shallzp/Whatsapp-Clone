@@ -419,6 +419,9 @@ function createMessageHTML(log, chat_type) {  //here type se group wali msg krna
         currdate = date;
         dateHTML = `
             <div class="date-day-container">
+                <div class="date-day on-top">
+                    <h4>${date}</h4>
+                </div>
                 <div class="date-day">
                     <h4>${date}</h4>
                 </div>
