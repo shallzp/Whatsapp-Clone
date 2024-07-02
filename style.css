@@ -431,6 +431,15 @@ img.open-menu {
     padding: 25px;
 }
 
+.contacts-list .chat.contact .horizontal-divider, .chat.me .horizontal-divider{
+    position: relative;
+}
+
+.contacts-list .chat.contact .horizontal-divider, .chat.me .horizontal-divider{
+    position: absolute;
+    top: -0.5px;
+}
+
 .contacts-list .chat p {
     margin: 0;
 }

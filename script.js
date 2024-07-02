@@ -15,7 +15,7 @@ $(document).ready(() => {
         whatsapp_log = JSON.parse(localStorageData);
     }
 
-    my_profile = whatsapp_log.users[0];
+    // my_profile = whatsapp_log.users[0];
 });
 
 
@@ -203,6 +203,12 @@ function masterChatLogs() {
             DetailsChange("contact", parseInt($(this).attr("contact-index")));
         }
     });
+
+    $(document).on('click', '#master .contacts-list .chat', function() {
+        if ($(this).attr("contact-index") !== undefined) {
+            DetailsChange("contact", parseInt($(this).attr("contact-index")));
+        }
+    });
 }
 
 function contactsList() {
@@ -288,7 +294,11 @@ function sortContactList(contacts) {
                             <div class="top">
                                 <h3 class="contact-name">${contact.name}</h3>
                             </div>
-                            <p>${contact.about}</p>
+                            ${contact.about ? 
+                                `<p>${contact.about}</p>`:
+                                `<br>`
+                            }
+                            
                         </div>
                     </div>
                 </div>

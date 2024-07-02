@@ -5,6 +5,24 @@ whatsapp_log = {
         about: "Busy",
         profile_pic: "./data/profiles/shalini.png",
         contacts: [{
+            name: "Anshu",
+            id: "",
+            profile_pic: false,
+            about: "",
+            starred_msgs: "",
+            chat_log: [],
+            call_log: []
+        },
+        {
+            name: "Bhavya",
+            id: "",
+            profile_pic: false,
+            about:"",
+            starred_msgs: "",
+            chat_log: [],
+            call_log: []
+        },
+        {
             name: "Sahil",
             id: "",
             profile_pic: "./data/profiles/sahil.png",
@@ -189,28 +207,10 @@ whatsapp_log = {
             }]
         },
         {
-            name: "Anshu",
-            id: "",
-            profile_pic: false,
-            about: "",
-            starred_msgs: "",
-            chat_log: [],
-            call_log: []
-        },
-        {
             name: "Shalu",
             id: "",
             profile_pic: false,
             about: "Blue",
-            starred_msgs: "",
-            chat_log: [],
-            call_log: []
-        },
-        {
-            name: "Bhavya",
-            id: "",
-            profile_pic: false,
-            about:"",
             starred_msgs: "",
             chat_log: [],
             call_log: []
@@ -233,6 +233,9 @@ whatsapp_log = {
                 by: ""
             }],
             call_log: []
+        }],
+        me: [{
+            chat_log: [],
         }]
     }]
 };
