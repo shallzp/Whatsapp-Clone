@@ -431,11 +431,6 @@ img.open-menu {
     padding: 25px;
 }
 
-.contacts-list .label p {
-    margin: 0;
-    padding: 0;
-}
-
 .contacts-list .chat p {
     margin: 0;
 }
@@ -746,6 +741,7 @@ img.open-menu {
 
 .date-day {
     padding: 5px 12px 6px 12px;
+    margin: 10px 0;
 }
 
 .on-top {

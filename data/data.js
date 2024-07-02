@@ -205,8 +205,16 @@ whatsapp_log = {
             starred_msgs: "",
             chat_log: [],
             call_log: []
-        }
-        ],
+        },
+        {
+            name: "Bhavya",
+            id: "",
+            profile_pic: false,
+            about:"",
+            starred_msgs: "",
+            chat_log: [],
+            call_log: []
+        }],
         groups: [{
             name: "OFFICIAL MBATECH - BTECH",
             profile_pic: false,

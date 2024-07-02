@@ -258,27 +258,44 @@ function contactsList() {
 function sortContactList(contacts) {
     const sortedContacts = contacts.sort((a, b) => a.name.localeCompare(b.name));
 
-    return sortedContacts.map(contact => `
-        <div class="chat contact">
-            ${contact.profile_pic ? 
-                `<div class="profile-pic" style="background-image: url(${contact.profile_pic}); background-repeat: no-repeat; background-size: cover;"></div>` :
-                `<div class="profile-pic">
-                    <img src="./images/icons/user.png" class="user">
-                </div>`
-            }
-            <div class="preview">
-                <div class="horizontal-divider default-bg"></div>
-                <div class="content">
-                    <div class="info">
-                        <div class="top">
-                            <h3 class="contact-name">${contact.name}</h3>
+    let currentLetter = '';
+
+    return sortedContacts.map(contact => {
+        const firstLetter = contact.name.charAt(0).toUpperCase();
+        let labelHtml = '';
+
+        if (firstLetter !== currentLetter) {
+            currentLetter = firstLetter;
+            labelHtml = `
+                <div class="label">
+                    <p>${currentLetter}</p>
+                </div>
+            `;
+        }
+
+        return `
+            ${labelHtml}
+            <div class="chat contact">
+                ${contact.profile_pic ? 
+                    `<div class="profile-pic" style="background-image: url(${contact.profile_pic}); background-repeat: no-repeat; background-size: cover;"></div>` :
+                    `<div class="profile-pic">
+                        <img src="./images/icons/user.png" class="user">
+                    </div>`
+                }
+                <div class="preview">
+                    <div class="horizontal-divider default-bg"></div>
+                    <div class="content">
+                        <div class="info">
+                            <div class="top">
+                                <h3 class="contact-name">${contact.name}</h3>
+                            </div>
+                            <p>${contact.about}</p>
                         </div>
-                        <p>${contact.about}</p>
                     </div>
                 </div>
             </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 $("#master").on('click', '.chat-room .chat .open-menu', function() {
@@ -366,7 +383,8 @@ function DetailsChange(type, index) {
     });
 }
 
-function createMessageHTML(log, chat_type) { //here type se group wali msg krna h
+let currdate = '';
+function createMessageHTML(log, chat_type) {  //here type se group wali msg krna h
     const situationImg = log.situation ? `<img src="./images/icons/${log.situation}.png">` : '';
     let attachmentHTML = '';
     let messageTextHTML = log.msg ? `<p class="msg-text">${log.msg}</p>` : '';
@@ -376,12 +394,12 @@ function createMessageHTML(log, chat_type) { //here type se group wali msg krna 
             log.images.forEach(image => {
                 attachmentHTML += `<img src="${image.path}" class="attachment">`;
             });
-        } 
+        }
         if (log.videos && log.videos.length > 0) {
             log.videos.forEach(video => {
                 attachmentHTML += `<video src="${video.path}" class="attachment" controls autoplay mute></video>`;
             });
-        } 
+        }
         if (log.documents && log.documents.length > 0) {
             log.documents.forEach(document => {
                 attachmentHTML += `<a href="${document.path}" class="attachment" download>${document.name}</a>`;
@@ -392,6 +410,20 @@ function createMessageHTML(log, chat_type) { //here type se group wali msg krna 
                 attachmentHTML += `<a href="${link.url}" class="attachment" target="_blank">${link.name}</a>`;
             });
         }
+    }
+
+    const date = log.date;
+    let dateHTML = '';
+
+    if (date !== currdate) {
+        currdate = date;
+        dateHTML = `
+            <div class="date-day-container">
+                <div class="date-day">
+                    <h4>${date}</h4>
+                </div>
+            </div>
+        `;
     }
 
     return `
@@ -417,14 +449,75 @@ function createMessageHTML(log, chat_type) { //here type se group wali msg krna 
                     <li>Forward</li>
                     <li>Pin</li>
                     <li>Star</li>
-                    <li>${log.type === 'recieved' ? 'Report' : ''}</li>
+                    <li>${log.type === 'received' ? 'Report' : ''}</li>
                     <li>Delete</li>
                 </ul>
             </div>
         </div>
     </div>
+    ${dateHTML}
     `;
 }
+
+// function createMessageHTML(log, chat_type) {
+//     const situationImg = log.situation ? `<img src="./images/icons/${log.situation}.png">` : '';
+//     let attachmentHTML = '';
+//     let messageTextHTML = log.msg ? `<p class="msg-text">${log.msg}</p>` : '';
+
+//     if (log.attachments) {
+//         if (log.images && log.images.length > 0) {
+//             log.images.forEach(image => {
+//                 attachmentHTML += `<img src="${image.path}" class="attachment">`;
+//             });
+//         } 
+//         if (log.videos && log.videos.length > 0) {
+//             log.videos.forEach(video => {
+//                 attachmentHTML += `<video src="${video.path}" class="attachment" controls autoplay mute></video>`;
+//             });
+//         } 
+//         if (log.documents && log.documents.length > 0) {
+//             log.documents.forEach(document => {
+//                 attachmentHTML += `<a href="${document.path}" class="attachment" download>${document.name}</a>`;
+//             });
+//         }
+//         if (log.links && log.links.length > 0) {
+//             log.links.forEach(link => {
+//                 attachmentHTML += `<a href="${link.url}" class="attachment" target="_blank">${link.name}</a>`;
+//             });
+//         }
+//     }
+
+//     return `
+//     <div class="msg-row ${log.type}">
+//         <div class="msg ${log.type}">
+//             ${attachmentHTML}
+//             ${messageTextHTML}
+//             <div class="right-bottom">
+//                 <span class="time">${log.time}</span>
+//                 ${log.type === 'sent' ? situationImg : ''}
+//             </div>
+//             <div class="img-hover menu-hover">
+//                 <img src="./images/icons/down.png">
+//             </div>
+//             <div class="img-hover emoji-hover">
+//                 <img src="./images/icons/reaction.png">
+//             </div>
+//             <div class="menu white-bg">
+//                 <ul>
+//                     <li>${log.type === 'sent' ? 'Message info' : ''}</li>
+//                     <li>Reply</li>
+//                     <li>React</li>
+//                     <li>Forward</li>
+//                     <li>Pin</li>
+//                     <li>Star</li>
+//                     <li>${log.type === 'recieved' ? 'Report' : ''}</li>
+//                     <li>Delete</li>
+//                 </ul>
+//             </div>
+//         </div>
+//     </div>
+//     `;
+// }
 
 function sendMessage(data, type, index) {
     const msg = $("#send").val().trim();
@@ -453,9 +546,8 @@ function sendMessage(data, type, index) {
     
 }
 
-
-const chat_date = "";
 function createChatHTML(chat, type) {
+    currdate = '';
     const chatlogs = chat.chat_log.map(log => createMessageHTML(log)).reverse().join('');
 
     return `
@@ -497,12 +589,6 @@ function createChatHTML(chat, type) {
 
         <div class="msg-box">
             ${chatlogs}
-            <div class="date-day on-top">
-                <h4>${chat_date}</h4>
-            </div>
-            <div class="date-day">
-                <h4>${chat_date}</h4>
-            </div>
         </div>
 
         <div class="footer default-bg">
