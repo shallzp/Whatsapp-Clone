@@ -1,4 +1,5 @@
-my_profile = whatsapp_log.users[0];
+let my_profile = whatsapp_log.users[0];
+
 
 $(document).ready(() => {
     clearMaster();
@@ -8,6 +9,13 @@ $(document).ready(() => {
     defaultDetails();
     
     masterChatLogs();
+
+    // const localStorageData = localStorage.getItem('whatsapp_log');
+    // if (localStorageData) {
+    //     whatsapp_log = JSON.parse(localStorageData);
+    // }
+
+    // my_profile = whatsapp_log.users[0];
 });
 
 
@@ -148,13 +156,45 @@ function createChatListHTML(chat, type, index) {
     `;
 }
 
-
-
 function masterChatLogs() {
-    const groups = my_profile.groups.map((group, index) => createChatListHTML(group, 'group', index));
-    const contacts = my_profile.contacts.map((contact, index) => createChatListHTML(contact, 'contact', index));
+    $(".new-chat").click(() => {
+        $(".chat-room").hide();
+        $(".contacts-list .chat-list").html(contactsList());
+        $(".contacts-list").show();
+    });
+
+    $(".contacts-list .home").click(() => {
+        $(".chat-room").show();
+        $(".contacts-list").hide();
+    });
+
+    $('#master .search input').on('keyup', function() {
+        if ($(this).val().trim().length > 0) {
+            $('.back').show();
+            $('.search-icon').hide();
+        } else {
+            $('.back').hide();
+            $('.search-icon').show();
+        }
+    });
+
+
+    let groupsHTML = [];
+    let contactsHTML = [];
+
+    my_profile.groups.forEach((group, index) => {
+        if (group.chat_log.length !== 0) {
+            groupsHTML.push(createChatListHTML(group, 'group', index));
+        }
+    });
     
-    $(".chat-list").append(groups.join('') + contacts.join(''));
+    my_profile.contacts.forEach((contact, index) => {
+        if (contact.chat_log.length !== 0) {
+            contactsHTML.push(createChatListHTML(contact, 'contact', index));
+        }
+    });
+
+    $(".chat-room .chat-list").append(groupsHTML.join('') + contactsHTML.join(''));
 
     $("#master .chat-room .chat").on('click', function() {
         if ($(this).attr("group-index") !== undefined) {
@@ -163,8 +203,82 @@ function masterChatLogs() {
         else if ($(this).attr("contact-index") !== undefined) {
             DetailsChange("contact", parseInt($(this).attr("contact-index")));
         }
-        scrollToBottom();
     });
+}
+
+function contactsList() {
+    return `
+        <div class="chat new create-group">
+        <div class="profile-pic">
+            <img src="./images/icons/group-user.png">
+        </div>
+        <div class="preview">
+            <p>New group</p>
+            <div class="horizontal-divider default-bg"></div>
+        </div>
+    </div>
+
+    <div class="chat new create-group">
+        <div class="profile-pic">
+            <img src="./images/icons/community-white.png">
+        </div>
+        <div class="preview">
+            <p>New community</p>
+            <div class="horizontal-divider default-bg"></div>
+        </div>
+    </div>
+
+        <div class="label">
+            <p>CONTACTS ON WHATSAPP</p>
+        </div>
+
+    <div class="chat me">
+    ${my_profile.profile_pic ? 
+        `<div class="profile-pic" style="background-image: url(${my_profile.profile_pic}); background-repeat: no-repeat; background-size: cover;"></div>` :
+        `<div class="profile-pic">
+            <img src="./images/icons/user.png" class="user">
+        </div>`
+    }
+        <div class="preview">
+            <div class="horizontal-divider default-bg"></div>
+            <div class="content">
+                <div class="info">
+                    <div class="top">
+                        <h3 class="contact-name">${my_profile.name}</h3>
+                    </div>
+                    <p>Message yourself</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    ${sortContactList(my_profile.contacts)}
+    `;  
+}
+
+function sortContactList(contacts) {
+    const sortedContacts = contacts.sort((a, b) => a.name.localeCompare(b.name));
+
+    return sortedContacts.map(contact => `
+        <div class="chat contact">
+            ${contact.profile_pic ? 
+                `<div class="profile-pic" style="background-image: url(${contact.profile_pic}); background-repeat: no-repeat; background-size: cover;"></div>` :
+                `<div class="profile-pic">
+                    <img src="./images/icons/user.png" class="user">
+                </div>`
+            }
+            <div class="preview">
+                <div class="horizontal-divider default-bg"></div>
+                <div class="content">
+                    <div class="info">
+                        <div class="top">
+                            <h3 class="contact-name">${contact.name}</h3>
+                        </div>
+                        <p>${contact.about}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
 }
 
 $("#master").on('click', '.chat-room .chat .open-menu', function() {
@@ -188,10 +302,6 @@ function defaultDetails() {
     `;
 
     $("#details").append(defaultHTML);
-}
-
-function scrollToBottom() {
-    $('.msg-box').scrollTop($('.msg-box')[0].scrollHeight);
 }
 
 function DetailsChange(type, index) {
@@ -231,6 +341,16 @@ function DetailsChange(type, index) {
         $(".doc-menu").toggle();
     });
 
+    $(".doc-menu ul li").each(function() {
+        $(this).click(function() {
+            if ($(this).find("div").hasClass("attach-click-pv")) {
+                $(".chat-screen .msg-box").hide();
+                $(".chat-screen .footer").hide();
+                $(".chat-screen").append(initializeCamera());
+            }
+        });
+    });
+
     $('#send').on('keyup', function() {
         if ($(this).val().trim().length > 0) {
             $('.send').show();
@@ -242,17 +362,11 @@ function DetailsChange(type, index) {
     });
 
     $(".send").click(() => {
-        sendMessage();
+        sendMessage(data, type, index);
     });
 }
 
-// function addNewMessage(log) {
-//     const newMessageHTML = createMessageHTML(log);
-//     $('.msg-box').append(newMessageHTML);
-//     scrollToBottom();
-// }
-
-function createMessageHTML(log, chat_type) {
+function createMessageHTML(log, chat_type) { //here type se group wali msg krna h
     const situationImg = log.situation ? `<img src="./images/icons/${log.situation}.png">` : '';
     let attachmentHTML = '';
     let messageTextHTML = log.msg ? `<p class="msg-text">${log.msg}</p>` : '';
@@ -312,15 +426,37 @@ function createMessageHTML(log, chat_type) {
     `;
 }
 
-function sendMessage() {
-    const msg = $("#send").text().trim();
+function sendMessage(data, type, index) {
+    const msg = $("#send").val().trim();
 
+    const date = new Date().toLocaleString('en-US', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
+    const time = new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+
+    const msg_log = {
+        date: date,
+        time: time,
+        msg: msg,
+        type: "sent",
+        attachments: false,
+        situation: "unread",
+        images: [],
+        videos: [],
+        documents: [],
+        links: [],
+    };
+
+    data.chat_log.push(msg_log);
+
+    localStorage.setItem('whatsapp_log', JSON.stringify(data)); 
+
+    DetailsChange(type, index);
     
 }
 
+
 const chat_date = "";
 function createChatHTML(chat, type) {
-    const chatlogs = chat.chat_log.map(log => createMessageHTML(log)).join('');
+    const chatlogs = chat.chat_log.map(log => createMessageHTML(log)).reverse().join('');
 
     return `
     <div class="chat-screen">
@@ -360,50 +496,50 @@ function createChatHTML(chat, type) {
         </div>
 
         <div class="msg-box">
+            ${chatlogs}
             <div class="date-day on-top">
                 <h4>${chat_date}</h4>
             </div>
             <div class="date-day">
                 <h4>${chat_date}</h4>
             </div>
-            ${chatlogs}
         </div>
 
         <div class="footer default-bg">
             <div class="doc-menu white-bg">
                 <ul>
                     <li>
-                        <div>
+                        <div class="attach-doc">
                             <img src="./images/icons/menu-doc.png">
                             <p>Document</p>
                         </div>
                     </li>
                     <li>
-                        <div>
+                        <div class="attach-pv">
                             <img src="./images/icons/menu-pv.png">
                             <p>Photos & video</p>
                         </div>
                     </li>
                     <li>
-                        <div>
+                        <div class="attach-pv-click">
                             <img src="./images/icons/menu-cam.png">
                             <p>Camera</p>
                         </div>
                     </li>
                     <li>
-                        <div>
+                        <div class="attach-contact">
                             <img src="./images/icons/menu-user.png">
                             <p>Contact</p>
                         </div>
                     </li>
                     <li>
-                        <div>
+                        <div class="attach-poll">
                             <img src="./images/icons/menu-poll.png">
                             <p>Poll</p>
                         </div>
                     </li>
                     <li>
-                        <div>
+                        <div class="create-sticker">
                             <img src="./images/icons/menu-sticker.png">
                             <p>New sticker</p>
                         </div>
@@ -415,7 +551,7 @@ function createChatHTML(chat, type) {
                 <img src="./images/icons/attach.png" class="menu-attach">
             </div>
             <div class="type-msg">
-                <input type="text" placeholder="Type a message" class="white-bg" id="send">
+                <input autocomplete="off" type="text" placeholder="Type a message" class="white-bg" id="send">
             </div>
             <div class="btns">
                 <img src="./images/icons/send.png" style="display: none;" class="send">
@@ -435,6 +571,68 @@ $(".msg-row .menu-hover").each(function() {
 });
 
 
+//Camera
+function initializeCamera() {
+    return `
+    <div class="camera-click">
+        <div class="header">
+            <div class="btns">
+                <img src="./images/icons/cancel-white.png">
+            </div>
+            <p>Take Photo</p>
+        </div>
+        <div class="cam-video">
+            <video id="cam" autoplay></video>
+        </div>
+        <button class="click">
+            <img src="./images/icons/camera.png">
+        </button>
+    </div>
+    `;
+}
+
+let vidStream;
+
+function startCamera() {
+    $(".camera-click").show();
+
+    let accessDevice = navigator.mediaDevices;
+
+    if (!accessDevice || !accessDevice.getUserMedia) {
+        console.log("getUserMedia() not supported.");
+        return;
+    }
+
+    accessDevice.getUserMedia({
+        audio: true,
+        video: true
+    })
+    .then(function(stream) {
+        vidStream = stream;
+        var video = $("#cam")[0];
+        if ("srcObject" in video) {
+            video.srcObject = stream;
+        } else {
+            video.src = window.URL.createObjectURL(stream);
+        }
+        video.onloadedmetadata = function(e) {
+            video.play();
+        };
+    })
+    .catch(function(e) {
+        console.log(e.name + ": " + e.message);
+    });
+}
+
+function stopCamera() {
+    if (vidStream) {
+        vidStream.getTracks().forEach(track => track.stop());
+    }
+
+    $(".camera-click").hide();
+}
+
+
 
 //Call
 function initializeCall(chat) {
@@ -449,7 +647,7 @@ function initializeCall(chat) {
     <p class="name">${chat.name}</p>
     <p class="current-msg">Ringing...</p>
 
-    <div class="vedio-screen" style="display: none;">
+    <div class="video-screen" style="display: none;">
         <video id="webcam" autoplay></video>
     </div>
     `;
@@ -457,14 +655,31 @@ function initializeCall(chat) {
     $(".call .bg").append(bgHTML);
 }
 
+let audioStream;
+
 function startVoiceCall() {
     $(".call").show();
+
+    let accessDevice = navigator.mediaDevices;
+
+    if (!accessDevice || !accessDevice.getUserMedia) {
+        console.log("getUserMedia() not supported.");
+        return;
+    }
+
+    accessDevice.getUserMedia({
+        audio: true
+    })
+    .then(function(stream) {
+        audioStream = stream;
+    })
+    .catch(function(e) {
+        console.log(e.name + ": " + e.message);
+    });
 }
 
-let vidStream;
-
 function startVideoCall() {
-    $(".vedio-screen").show();
+    $(".video-screen").show();
     $(".call").show();
 
     let accessDevice = navigator.mediaDevices;
@@ -502,7 +717,7 @@ function stopCall() {
     else if (audioStream) {
         audioStream.getTracks().forEach(track => track.stop());
     }
-    $(".vedio-screen").hide();
+    $(".video-screen").hide();
     $(".call").hide();
 }
 
@@ -615,7 +830,7 @@ function initProfileInfo(chat) {
                 <p>Mute notifications</p>
             </div>
             <label class="switch">
-                <input type="checkbox">
+                <input autocomplete="off" type="checkbox">
                 <span class="slider round"></span>
             </label>
         </div>
@@ -685,7 +900,7 @@ function initSearchTab(chat) {
                 <div class="img">
                     <img src="./images/icons/search.png" class="search-icon">
                 </div>
-                <input type="text" placeholder="Search">
+                <input autocomplete="off" type="text" placeholder="Search">
                 <img src="./images/icons/cancel.png" class="cancel">
             </div>
         </div>

@@ -7,6 +7,16 @@
     background-color: #FFFFFF !important;
 }
 
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.btns{
+    display: flex;
+    align-items: center;
+}
+
 
 
 
@@ -49,10 +59,8 @@ body {
 }
 
 #nav .btns {
-    display: flex;
     position: relative;
     margin: 10px 0;
-    align-items: center;
 }
 
 .active, .clicked {
@@ -142,10 +150,6 @@ body {
     font-size: 22px;
     font-weight: 700;
     line-height: 32px;
-}
-
-.heading .btns {
-    display: flex;
 }
 
 .heading .btns div {
@@ -372,6 +376,68 @@ img.open-menu {
 .horizontal-divider{
     width: 100%;
     height: 1px; 
+}
+
+
+/* Contacts List */
+.contacts-list {
+    display: none;
+}
+
+.contacts-list .heading{
+    background-color: #008069;
+    padding-top: 50px;
+    color: #FFFFFF;
+    justify-content: left !important;
+    gap: 20px;
+}
+
+.contacts-list .heading h2 {
+    font-size: 19px !important;
+    font-weight: 500;
+}
+
+.contacts-list .contents {
+    margin-top: 156px;
+    height: calc(100vh - 156px);
+}
+
+.contacts-list .new {
+    display: flex;
+    align-items: center;
+}
+
+.contacts-list .new .profile-pic {
+    background-color: #008069;
+}
+
+.contacts-list .new img {
+    height: 30px;
+    width: 30px;
+}
+
+.contacts-list .new .preview {
+    width: calc(100% - 49px);
+}
+
+.contacts-list .new p {
+    margin: 0;
+    padding: 24.5px;
+}
+
+.contacts-list .label {
+    color: #008069;
+    font-weight: 450;
+    padding: 25px;
+}
+
+.contacts-list .label p {
+    margin: 0;
+    padding: 0;
+}
+
+.contacts-list .chat p {
+    margin: 0;
 }
 
 
@@ -634,9 +700,7 @@ img.open-menu {
 }
 
 .chat-screen .btns {
-    display: flex;
     position: relative;
-    align-items: center;
 }
 
 .chat-screen .btns img {
@@ -657,7 +721,7 @@ img.open-menu {
     overflow-x: hidden;
     padding: 12px 60px;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     gap: 5px;
     align-items: center;
 }
@@ -898,6 +962,62 @@ img.open-menu {
     font-weight: 400;
     line-height: 22px;
     width: 96%;
+}
+
+
+/* Camera */
+.camera-click {
+    margin-top: 60px;
+    height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.camera-click .header {
+    background-color: #008069;
+    color: #FFFFFF;
+    display: flex;
+    padding: 10px 30px;
+    gap: 30px;
+}
+
+.camera-click .header p {
+    font-size: 19px;
+    font-weight: 500;
+    line-height: 32px;
+}
+
+.camera-click .header img {
+    height: 20px;
+    width: 20px;
+}
+
+.cam-video {
+    height: 422px;
+    margin-top: 10px;
+}
+
+#cam {
+    width: inherit;
+    height: inherit;
+    transform: scaleX(-1);
+    border-radius: 8px !important;
+}
+
+.click {
+    position: absolute;
+    bottom: 50px;
+    background-color: #008069;
+    border: none;
+    outline: none;
+    border-radius: 30px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 
@@ -1260,9 +1380,7 @@ img.open-menu {
 }
 
 .call .right .btns {
-    display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: right;
     gap: 20px;
 }
@@ -1297,7 +1415,7 @@ img.open-menu {
     font-weight: 450;
 }
 
-.vedio-screen {
+.video-screen {
     width: 330px;
     margin-top: 10px;
 }
@@ -1310,9 +1428,7 @@ img.open-menu {
 }
 
 .call .footer .btns{
-    display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: center;
     gap: 15px;
     padding: 20px;

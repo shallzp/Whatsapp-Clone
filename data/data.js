@@ -1,9 +1,9 @@
-const whatsapp_log = {
+whatsapp_log = {
     users: [{
         name: "Shalini",
         id: "",
         about: "Busy",
-        profile_pic: "./images/data/shalini.png",
+        profile_pic: "./data/profiles/shalini.png",
         contacts: [{
             name: "Sahil",
             id: "",
@@ -188,15 +188,24 @@ const whatsapp_log = {
                 call_type: "voice"
             }]
         },
-        // {
-        //     name: "Anshu",
-        //     id: "",
-        //     profile_pic: false,
-        //     about: "",
-        //     starred_msgs: "",
-        //     chat_log: [],
-        //     call_log: []
-        // }
+        {
+            name: "Anshu",
+            id: "",
+            profile_pic: false,
+            about: "",
+            starred_msgs: "",
+            chat_log: [],
+            call_log: []
+        },
+        {
+            name: "Shalu",
+            id: "",
+            profile_pic: false,
+            about: "Blue",
+            starred_msgs: "",
+            chat_log: [],
+            call_log: []
+        }
         ],
         groups: [{
             name: "OFFICIAL MBATECH - BTECH",
