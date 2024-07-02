@@ -21,7 +21,6 @@ $(document).ready(() => {
 
 
 
-
 // Navigation
 function setActiveNavItem(activeItem) {
     $(".nav-items").removeClass("active");
@@ -260,7 +259,7 @@ function sortContactList(contacts) {
 
     let currentLetter = '';
 
-    return sortedContacts.map(contact => {
+    return sortedContacts.map((contact, index) => {
         const firstLetter = contact.name.charAt(0).toUpperCase();
         let labelHtml = '';
 
@@ -275,7 +274,7 @@ function sortContactList(contacts) {
 
         return `
             ${labelHtml}
-            <div class="chat contact">
+            <div class="chat contact" contact-index="${index}">
                 ${contact.profile_pic ? 
                     `<div class="profile-pic" style="background-image: url(${contact.profile_pic}); background-repeat: no-repeat; background-size: cover;"></div>` :
                     `<div class="profile-pic">
@@ -320,6 +319,7 @@ function defaultDetails() {
 
     $("#details").append(defaultHTML);
 }
+
 
 function DetailsChange(type, index) {
     $("#details").empty();
@@ -382,6 +382,7 @@ function DetailsChange(type, index) {
         sendMessage(data, type, index);
     });
 }
+
 
 let currdate = '';
 function createMessageHTML(log, chat_type) {  //here type se group wali msg krna h
@@ -460,66 +461,6 @@ function createMessageHTML(log, chat_type) {  //here type se group wali msg krna
     ${dateHTML}
     `;
 }
-
-// function createMessageHTML(log, chat_type) {
-//     const situationImg = log.situation ? `<img src="./images/icons/${log.situation}.png">` : '';
-//     let attachmentHTML = '';
-//     let messageTextHTML = log.msg ? `<p class="msg-text">${log.msg}</p>` : '';
-
-//     if (log.attachments) {
-//         if (log.images && log.images.length > 0) {
-//             log.images.forEach(image => {
-//                 attachmentHTML += `<img src="${image.path}" class="attachment">`;
-//             });
-//         } 
-//         if (log.videos && log.videos.length > 0) {
-//             log.videos.forEach(video => {
-//                 attachmentHTML += `<video src="${video.path}" class="attachment" controls autoplay mute></video>`;
-//             });
-//         } 
-//         if (log.documents && log.documents.length > 0) {
-//             log.documents.forEach(document => {
-//                 attachmentHTML += `<a href="${document.path}" class="attachment" download>${document.name}</a>`;
-//             });
-//         }
-//         if (log.links && log.links.length > 0) {
-//             log.links.forEach(link => {
-//                 attachmentHTML += `<a href="${link.url}" class="attachment" target="_blank">${link.name}</a>`;
-//             });
-//         }
-//     }
-
-//     return `
-//     <div class="msg-row ${log.type}">
-//         <div class="msg ${log.type}">
-//             ${attachmentHTML}
-//             ${messageTextHTML}
-//             <div class="right-bottom">
-//                 <span class="time">${log.time}</span>
-//                 ${log.type === 'sent' ? situationImg : ''}
-//             </div>
-//             <div class="img-hover menu-hover">
-//                 <img src="./images/icons/down.png">
-//             </div>
-//             <div class="img-hover emoji-hover">
-//                 <img src="./images/icons/reaction.png">
-//             </div>
-//             <div class="menu white-bg">
-//                 <ul>
-//                     <li>${log.type === 'sent' ? 'Message info' : ''}</li>
-//                     <li>Reply</li>
-//                     <li>React</li>
-//                     <li>Forward</li>
-//                     <li>Pin</li>
-//                     <li>Star</li>
-//                     <li>${log.type === 'recieved' ? 'Report' : ''}</li>
-//                     <li>Delete</li>
-//                 </ul>
-//             </div>
-//         </div>
-//     </div>
-//     `;
-// }
 
 function sendMessage(data, type, index) {
     const msg = $("#send").val().trim();
@@ -721,7 +662,6 @@ function stopCamera() {
 }
 
 
-
 //Call
 function initializeCall(chat) {
     const bgHTML = `
@@ -812,6 +752,7 @@ function stopCall() {
 $(".call .header .close").click(function() {
     stopCall();
 });
+
 
 
 
