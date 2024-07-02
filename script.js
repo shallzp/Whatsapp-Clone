@@ -10,12 +10,12 @@ $(document).ready(() => {
     
     masterChatLogs();
 
-    // const localStorageData = localStorage.getItem('whatsapp_log');
-    // if (localStorageData) {
-    //     whatsapp_log = JSON.parse(localStorageData);
-    // }
+    const localStorageData = localStorage.getItem('whatsapp_log');
+    if (localStorageData) {
+        whatsapp_log = JSON.parse(localStorageData);
+    }
 
-    // my_profile = whatsapp_log.users[0];
+    my_profile = whatsapp_log.users[0];
 });
 
 
@@ -418,14 +418,13 @@ function createMessageHTML(log, chat_type) {  //here type se group wali msg krna
     if (date !== currdate) {
         currdate = date;
         dateHTML = `
-            <div class="date-day-container">
-                <div class="date-day on-top">
-                    <h4>${date}</h4>
-                </div>
-                <div class="date-day">
-                    <h4>${date}</h4>
-                </div>
-            </div>
+        <div class="date-day on-top">
+            <h4>${date}</h4>
+        </div>
+        <div class="date-day">
+            <h4>${date}</h4>
+        </div>
+
         `;
     }
 
