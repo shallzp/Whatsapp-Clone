@@ -224,13 +224,14 @@ whatsapp_log = {
                 time: "10:18 AM",
                 msg: "Good Morning",
                 type: "sent",
-                attachments: false,
+                attachments: true,
                 situation: "unread",
-                images: [],
+                images: [{
+                    path : "./data/attachments/images/1.png"}],
                 videos: [],
                 documents: [],
                 links: [],
-                by: ""
+                by: "Shalini"
             }],
             call_log: []
         }],

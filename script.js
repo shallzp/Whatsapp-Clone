@@ -1,21 +1,31 @@
-let my_profile = whatsapp_log.users[0];
+function saveDataToLocalStorage(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+}
 
+function getDataFromLocalStorage(key) {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
+}
 
-$(document).ready(() => {
+function init() {
     clearMaster();
     $(".chat-room").show();
     setupNavigationFiltering();
-
-    defaultDetails();
-    
     masterChatLogs();
+}
 
-    const localStorageData = localStorage.getItem('whatsapp_log');
-    if (localStorageData) {
-        whatsapp_log = JSON.parse(localStorageData);
-    }
 
-    // my_profile = whatsapp_log.users[0];
+var my_profile = whatsapp_log.users[0];
+
+$(document).ready(() => {
+    // const storedData = getDataFromLocalStorage('whatsapp_log');
+    // if (storedData) {
+    //     whatsapp_log = storedData;
+    //     my_profile = whatsapp_log.users[0];
+    // }
+
+    init();
+    defaultDetails();
 });
 
 
@@ -193,7 +203,7 @@ function masterChatLogs() {
         }
     });
 
-    $(".chat-room .chat-list").append(groupsHTML.join('') + contactsHTML.join(''));
+    $(".chat-room .chat-list").html(groupsHTML.join('') + contactsHTML.join(''));
 
     $("#master .chat-room .chat").on('click', function() {
         if ($(this).attr("group-index") !== undefined) {
@@ -361,24 +371,26 @@ function DetailsChange(type, index) {
         $(this).toggleClass("clicked");
     });
 
-    initializeCall(data);
+    initializeCall(data, type);
 
     $(".menu-attach").on("click", function() {
         $(this).toggleClass("clicked");
         $(".doc-menu").toggle();
     });
 
-    $(".doc-menu ul li").each(function() {
-        $(this).click(function() {
-            if ($(this).find("div").hasClass("attach-click-pv")) {
-                $(".chat-screen .msg-box").hide();
-                $(".chat-screen .footer").hide();
-                $(".chat-screen").append(initializeCamera());
-            }
+    $(document).on('click', '.doc-menu ul li', function() {
+        $(this).each(function() {
+            $(this).click(function() {
+                if ($(this).hasClass("attach-click-pv")) {
+                    $(".chat-screen .msg-box").hide();
+                    $(".chat-screen .footer").hide();
+                    $(".chat-screen").append(initializeCamera());
+                }
+            });
         });
     });
 
-    $('#send').on('keyup', function() {
+    $('.send-msg').on('keyup', function() {
         if ($(this).val().trim().length > 0) {
             $('.send').show();
             $('.record').hide();
@@ -395,7 +407,7 @@ function DetailsChange(type, index) {
 
 
 let currdate = '';
-function createMessageHTML(log, chat_type) {  //here type se group wali msg krna h
+function createMessageHTML(log, type) {
     const situationImg = log.situation ? `<img src="./images/icons/${log.situation}.png">` : '';
     let attachmentHTML = '';
     let messageTextHTML = log.msg ? `<p class="msg-text">${log.msg}</p>` : '';
@@ -442,6 +454,11 @@ function createMessageHTML(log, chat_type) {  //here type se group wali msg krna
     return `
     <div class="msg-row ${log.type}">
         <div class="msg ${log.type}">
+            ${type === 'group' ? `
+                <div class="left-upper">
+                    <a href="#">${log.by}</a>
+                </div>`
+            : ''}
             ${attachmentHTML}
             ${messageTextHTML}
             <div class="right-bottom">
@@ -473,10 +490,14 @@ function createMessageHTML(log, chat_type) {  //here type se group wali msg krna
 }
 
 function sendMessage(data, type, index) {
-    const msg = $("#send").val().trim();
+    const msg = $(".send-msg").val().trim();
 
-    const date = new Date().toLocaleString('en-US', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
-    const time = new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+    if (msg === "") {
+        return;
+    }
+
+    const date = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
+    const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
 
     const msg_log = {
         date: date,
@@ -488,20 +509,31 @@ function sendMessage(data, type, index) {
         images: [],
         videos: [],
         documents: [],
-        links: [],
+        links: []
     };
+    
+    if (type === 'group') {
+        msg_log.by = my_profile.name;
+    }
+    
 
     data.chat_log.push(msg_log);
 
-    localStorage.setItem('whatsapp_log', JSON.stringify(data)); 
+    saveDataToLocalStorage('whatsapp_log', whatsapp_log);
 
+    init();
     DetailsChange(type, index);
     
+    $(".send-msg").val("");
+}
+
+function addAttachment(data) {
+    data.attachments = true;
 }
 
 function createChatHTML(chat, type) {
     currdate = '';
-    const chatlogs = chat.chat_log.map(log => createMessageHTML(log)).reverse().join('');
+    const chatlogs = chat.chat_log.map(log => createMessageHTML(log, type)).reverse().join('');
 
     return `
     <div class="chat-screen">
@@ -547,38 +579,38 @@ function createChatHTML(chat, type) {
         <div class="footer default-bg">
             <div class="doc-menu white-bg">
                 <ul>
-                    <li>
-                        <div class="attach-doc">
+                    <li class="attach-doc">
+                        <div>
                             <img src="./images/icons/menu-doc.png">
                             <p>Document</p>
                         </div>
                     </li>
-                    <li>
-                        <div class="attach-pv">
+                    <li class="attach-pv">
+                        <div>
                             <img src="./images/icons/menu-pv.png">
                             <p>Photos & video</p>
                         </div>
                     </li>
-                    <li>
-                        <div class="attach-pv-click">
+                    <li class="attach-pv-click">
+                        <div>
                             <img src="./images/icons/menu-cam.png">
                             <p>Camera</p>
                         </div>
                     </li>
-                    <li>
-                        <div class="attach-contact">
+                    <li class="attach-contact">
+                        <div>
                             <img src="./images/icons/menu-user.png">
                             <p>Contact</p>
                         </div>
                     </li>
-                    <li>
-                        <div class="attach-poll">
+                    <li class="attach-poll">
+                        <div>
                             <img src="./images/icons/menu-poll.png">
                             <p>Poll</p>
                         </div>
                     </li>
-                    <li>
-                        <div class="create-sticker">
+                    <li class="create-sticker">
+                        <div>
                             <img src="./images/icons/menu-sticker.png">
                             <p>New sticker</p>
                         </div>
@@ -590,7 +622,7 @@ function createChatHTML(chat, type) {
                 <img src="./images/icons/attach.png" class="menu-attach">
             </div>
             <div class="type-msg">
-                <input autocomplete="off" type="text" placeholder="Type a message" class="white-bg" id="send">
+                <input autocomplete="off" type="text" placeholder="Type a message" class="white-bg send-msg">
             </div>
             <div class="btns">
                 <img src="./images/icons/send.png" style="display: none;" class="send">
@@ -673,7 +705,7 @@ function stopCamera() {
 
 
 //Call
-function initializeCall(chat) {
+function initializeCall(chat, type) {
     const bgHTML = `
     ${chat.profile_pic ? 
         `<div class="profile-pic" style="background-image: url(${chat.profile_pic}); background-repeat: no-repeat; background-size: cover;"></div>` :
