@@ -15,14 +15,14 @@ function init() {
 }
 
 
-var my_profile = whatsapp_log.users[0];
+var my_profile = wpData.users[0];
 
 $(document).ready(() => {
-    // const storedData = getDataFromLocalStorage('whatsapp_log');
-    // if (storedData) {
-    //     whatsapp_log = storedData;
-    //     my_profile = whatsapp_log.users[0];
-    // }
+    const storedData = getDataFromLocalStorage('wpData');
+    if (storedData) {
+        wpData = storedData;
+        my_profile = wpData.users[0];
+    }
 
     init();
     defaultDetails();
@@ -359,6 +359,18 @@ function DetailsChange(type, index) {
         $("#details").css("width", "calc((100vw - 29vw - 60px)/2 + 42px)");
     });
 
+    $(".voice-call").click(() => {
+        startVoiceCall(data);
+    });
+
+    $(".video-call").click(() => {
+        startVideoCall(data);
+    });
+
+    $(".call .header .close, .call .end-call").click(function() {
+        stopCall(data);
+    });
+
     $(".search-chat").on("click", function() {
         $(this).toggleClass("clicked");
         $(".search-tab").append(initSearchTab(data));
@@ -378,19 +390,7 @@ function DetailsChange(type, index) {
         $(".doc-menu").toggle();
     });
 
-    $(document).on('click', '.doc-menu ul li', function() {
-        $(this).each(function() {
-            $(this).click(function() {
-                if ($(this).hasClass("attach-click-pv")) {
-                    $(".chat-screen .msg-box").hide();
-                    $(".chat-screen .footer").hide();
-                    $(".chat-screen").append(initializeCamera());
-                }
-            });
-        });
-    });
-
-    $('.send-msg').on('keyup', function() {
+    $('#chat-screen .send-msg').on('keyup', function() {
         if ($(this).val().trim().length > 0) {
             $('.send').show();
             $('.record').hide();
@@ -519,7 +519,7 @@ function sendMessage(data, type, index) {
 
     data.chat_log.push(msg_log);
 
-    saveDataToLocalStorage('whatsapp_log', whatsapp_log);
+    saveDataToLocalStorage('wpData', wpData);
 
     init();
     DetailsChange(type, index);
@@ -549,8 +549,8 @@ function createChatHTML(chat, type) {
             </div>
             <div class="right">
                 <button>
-                    <img src="./images/icons/video.png" onclick="startVideoCall()">
-                    <img src="./images/icons/voice.png" onclick="startVoiceCall()">
+                    <img src="./images/icons/video.png" class="video-call">
+                    <img src="./images/icons/voice.png" class="voice-call">
                 </button>
                 <div class="btns">
                     <img src="./images/icons/search.png" class="search-chat">
@@ -568,6 +568,44 @@ function createChatHTML(chat, type) {
                         <li>Report</li>
                         <li>Block</li>
                     </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="cam-tab">
+            <div class="camera-click">
+                <div class="header">
+                    <div class="btns">
+                        <img src="./images/icons/cancel-white.png" class="close">
+                    </div>
+                    <p>Take Photo</p>
+                </div>
+
+                <div class="snap-pv">
+                    <div class="cam-video">
+                        <video id="cam" autoplay></video>
+                    </div>
+                    <button class="click">
+                        <img src="./images/icons/camera.png">
+                    </button>
+                </div>
+                
+                <div class="edit-snapped">
+                    <div class="edit-row">
+
+                    </div>
+                    <canvas class="snapped" width="640" height="480"></canvas>
+                    <div class="send-footer">
+                        <div class="type-caption">
+                            <input autocomplete="off" type="text" placeholder="Add a caption" class="white-bg send-msg">
+                        </div>
+                        <div class="btns">
+                            <img src="./images/icons/view-once.png">
+                        </div>
+                        <button class="send">
+                            <img src="./images/icons/send-white.png">
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -591,7 +629,7 @@ function createChatHTML(chat, type) {
                             <p>Photos & video</p>
                         </div>
                     </li>
-                    <li class="attach-pv-click">
+                    <li class="attach-pv-click" onclick="openCamera()">
                         <div>
                             <img src="./images/icons/menu-cam.png">
                             <p>Camera</p>
@@ -643,25 +681,6 @@ $(".msg-row .menu-hover").each(function() {
 
 
 //Camera
-function initializeCamera() {
-    return `
-    <div class="camera-click">
-        <div class="header">
-            <div class="btns">
-                <img src="./images/icons/cancel-white.png">
-            </div>
-            <p>Take Photo</p>
-        </div>
-        <div class="cam-video">
-            <video id="cam" autoplay></video>
-        </div>
-        <button class="click">
-            <img src="./images/icons/camera.png">
-        </button>
-    </div>
-    `;
-}
-
 let vidStream;
 
 function startCamera() {
@@ -703,6 +722,34 @@ function stopCamera() {
     $(".camera-click").hide();
 }
 
+function openCamera() {
+    $(".doc-menu").hide();
+    $(".menu-attach").removeClass("clicked");
+
+    startCamera();
+    $(".cam-tab").show();
+
+    $(".msg-box, .chat-screen .footer").hide();
+
+    $(".camera-click .close").click(function() {
+        $(this).closest(".cam-tab").hide();
+        stopCamera();
+        $(".msg-box, .chat-screen .footer").show();
+    });
+
+    const canvas = $(".snapped")[0];
+    const context = canvas.getContext('2d');
+    const video = $('#cam')[0];
+
+    $(".click").click(() => {
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        $(".snap-pv").hide();
+        $(".edit-snapped").show();
+    });
+}
+
+
+
 
 //Call
 function initializeCall(chat, type) {
@@ -727,7 +774,7 @@ function initializeCall(chat, type) {
 
 let audioStream;
 
-function startVoiceCall() {
+function startVoiceCall(data) {
     $(".call").show();
 
     let accessDevice = navigator.mediaDevices;
@@ -746,9 +793,23 @@ function startVoiceCall() {
     .catch(function(e) {
         console.log(e.name + ": " + e.message);
     });
+
+    const currDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
+    const currTime = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+    log = {
+        date: `${currDate}`,
+        time: `${currTime}`,
+        duration: Date.now(),
+        type: "voice" 
+    }
+
+    data.call_log.push(log);
+
+    saveDataToLocalStorage('wpData', wpData);
 }
 
-function startVideoCall() {
+function startVideoCall(data) {
     $(".video-screen").show();
     $(".call").show();
 
@@ -778,9 +839,36 @@ function startVideoCall() {
     .catch(function(e) {
         console.log(e.name + ": " + e.message);
     });
+
+    const currDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
+    const currTime = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+    log = {
+        date: `${currDate}`,
+        time: `${currTime}`,
+        duration: Date.now(),
+        type: "video" 
+    }
+
+    data.call_log.push(log);
+
+    saveDataToLocalStorage('wpData', wpData);
 }
 
-function stopCall() {
+function calcDuration(log) {
+    callStart = log.duration;
+
+    duration = Date.now() - callStart;
+
+    let totalSeconds = Math.floor(duration / 1000);
+    let hours = Math.floor(totalSeconds / 3600);
+    let minutes = Math.floor((totalSeconds % 3600) / 60);
+    let seconds = totalSeconds % 60;
+
+    log.duration = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+function stopCall(data) {
     if (vidStream) {
         vidStream.getTracks().forEach(track => track.stop());
     }
@@ -789,11 +877,13 @@ function stopCall() {
     }
     $(".video-screen").hide();
     $(".call").hide();
-}
 
-$(".call .header .close").click(function() {
-    stopCall();
-});
+    lastLog = data.call_log[data.call_log.length - 1];
+
+    calcDuration(lastLog);
+
+    saveDataToLocalStorage('wpData', wpData);
+}
 
 
 

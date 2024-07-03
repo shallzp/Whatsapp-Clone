@@ -1,4 +1,4 @@
-whatsapp_log = {
+wpData = {
     users: [{
         name: "Shalini",
         id: "",
@@ -199,12 +199,7 @@ whatsapp_log = {
                 documents: [],
                 links: [],
             }],
-            call_log: [{
-                date: "26-06-2024",
-                time: "12:09 AM",
-                duration: "00:59",
-                call_type: "voice"
-            }]
+            call_log: []
         },
         {
             name: "Shalu",
