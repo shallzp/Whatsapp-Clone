@@ -813,10 +813,11 @@ img.open-menu {
 
 .msg:has(.left-upper):has(.attachment) > .msg-text {
     padding-top: 0;
+    left: 0;
 }
 
 .msg:has(.left-upper):has(.attachment) > .attachment {
-    padding-top: 25px;
+    margin-top: 25px;
 }
 
 .msg .left-upper {
@@ -1036,7 +1037,7 @@ img.open-menu {
     width: 20px;
 }
 
-.snap-pv {
+.snap-image {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1112,7 +1113,7 @@ img.open-menu {
     width: 96%;
 }
 
-.camera-click .send-footer .send {
+.camera-click .send-footer .send-snapped {
     right: 50px;
     padding: 18px;
     border-radius: 35px;

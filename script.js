@@ -390,18 +390,35 @@ function DetailsChange(type, index) {
         $(".doc-menu").toggle();
     });
 
-    $('#chat-screen .send-msg').on('keyup', function() {
+    $(".attach-doc").click(() => {
+        openCamera(data, type, index);
+    });
+
+    $(".attach-pv").click(() => {
+        openCamera(data, type, index);
+    });
+
+    $(".attach-pv-click").click(() => {
+        openCamera(data, type, index);
+    });
+
+    $('.chat-screen .footer .send-msg').on('keyup', function() {
         if ($(this).val().trim().length > 0) {
             $('.send').show();
             $('.record').hide();
-        } else {
+        } 
+        else {
             $('.send').hide();
             $('.record').show();
         }
     });
 
-    $(".send").click(() => {
-        sendMessage(data, type, index);
+    $(".send").click(function() {
+        const msg = $(this).closest(".footer").find(".send-msg").val().trim();
+        if (msg.length > 0) {
+            sendMessage(msg, data, type, index);
+            $(this).closest(".footer").find(".send-msg").val("");
+        }
     });
 }
 
@@ -489,13 +506,7 @@ function createMessageHTML(log, type) {
     `;
 }
 
-function sendMessage(data, type, index) {
-    const msg = $(".send-msg").val().trim();
-
-    if (msg === "") {
-        return;
-    }
-
+function createMsgLog(msg, type) {
     const date = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
     const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
 
@@ -515,7 +526,12 @@ function sendMessage(data, type, index) {
     if (type === 'group') {
         msg_log.by = my_profile.name;
     }
-    
+
+    return msg_log;
+}
+
+function sendMessage(msg, data, type, index) {
+    const msg_log = createMsgLog(msg, type);    
 
     data.chat_log.push(msg_log);
 
@@ -523,12 +539,22 @@ function sendMessage(data, type, index) {
 
     init();
     DetailsChange(type, index);
-    
-    $(".send-msg").val("");
 }
 
-function addAttachment(data) {
-    data.attachments = true;
+function sendImage(caption, data, type, index, img_path) {
+    const msg_log = createMsgLog(caption, type);
+
+    msg_log.attachments = true;
+
+    image_log = {path : img_path};
+    msg_log.images.push(image_log);
+    
+    data.chat_log.push(msg_log);
+
+    saveDataToLocalStorage('wpData', wpData);
+
+    init();
+    DetailsChange(type, index);
 }
 
 function createChatHTML(chat, type) {
@@ -581,7 +607,7 @@ function createChatHTML(chat, type) {
                     <p>Take Photo</p>
                 </div>
 
-                <div class="snap-pv">
+                <div class="snap-image">
                     <div class="cam-video">
                         <video id="cam" autoplay></video>
                     </div>
@@ -597,12 +623,12 @@ function createChatHTML(chat, type) {
                     <canvas class="snapped" width="640" height="480"></canvas>
                     <div class="send-footer">
                         <div class="type-caption">
-                            <input autocomplete="off" type="text" placeholder="Add a caption" class="white-bg send-msg">
+                            <input autocomplete="off" type="text" placeholder="Add a caption" class="white-bg send-caption">
                         </div>
                         <div class="btns">
                             <img src="./images/icons/view-once.png">
                         </div>
-                        <button class="send">
+                        <button class="send-snapped">
                             <img src="./images/icons/send-white.png">
                         </button>
                     </div>
@@ -629,7 +655,7 @@ function createChatHTML(chat, type) {
                             <p>Photos & video</p>
                         </div>
                     </li>
-                    <li class="attach-pv-click" onclick="openCamera()">
+                    <li class="attach-pv-click">
                         <div>
                             <img src="./images/icons/menu-cam.png">
                             <p>Camera</p>
@@ -722,7 +748,7 @@ function stopCamera() {
     $(".camera-click").hide();
 }
 
-function openCamera() {
+function openCamera(data, type, index) {
     $(".doc-menu").hide();
     $(".menu-attach").removeClass("clicked");
 
@@ -743,8 +769,21 @@ function openCamera() {
 
     $(".click").click(() => {
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        $(".snap-pv").hide();
+        $(".snap-image").hide();
         $(".edit-snapped").show();
+    });
+
+    $(".camera-click .send-snapped").click(function() {
+        const snap = canvas.toDataURL('image/png');
+    
+        if (vidStream) {
+            vidStream.getTracks().forEach(track => track.stop());
+        }
+    
+        const msg = $(this).closest(".send-footer").find(".send-caption").val();
+        
+        sendImage(msg, data, type, index, snap);
+        $(this).closest(".send-footer").find(".send-caption").val("");
     });
 }
 
