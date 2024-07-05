@@ -1,11 +1,26 @@
+// function saveDataToLocalStorage(key, data) {
+//     try {
+//         localStorage.setItem(key, JSON.stringify(data));
+//     }
+//     catch (e) {
+//         if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+//             console.error('Local storage quota exceeded.');
+//             // Optionally, handle the error by clearing old items or notifying the user
+//         }
+//     }
+// }
+
 function saveDataToLocalStorage(key, data) {
     try {
+        console.log("Saving data to local storage:", key, data); // Log the key and data
         localStorage.setItem(key, JSON.stringify(data));
     }
     catch (e) {
         if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
             console.error('Local storage quota exceeded.');
-            // Optionally, handle the error by clearing old items or notifying the user
+        } 
+        else {
+            console.error('Error saving to local storage:', e);
         }
     }
 }
@@ -431,6 +446,29 @@ function DetailsChange(type, index) {
 }
 
 
+function editImageHTML() {
+    return `
+    <div class="edit-image">
+        <div class="edit-row">
+
+        </div>
+        <video class="v" style="display: none;" controls mute autoplay></video>
+        <canvas class="pv" width="640" height="480"></canvas>
+        <div class="send-footer">
+            <div class="type-caption">
+                <input autocomplete="off" type="text" placeholder="Add a caption" class="white-bg send-caption">
+            </div>
+            <div class="btns">
+                <img src="./images/icons/view-once.png">
+            </div>
+            <button class="send-pv">
+                <img src="./images/icons/send-white.png">
+            </button>
+        </div>
+    </div>
+    `;
+}
+
 let currdate = '';
 function createMessageHTML(log, type) {
     const situationImg = log.situation ? `<img src="./images/icons/${log.situation}.png">` : '';
@@ -514,73 +552,6 @@ function createMessageHTML(log, type) {
     `;
 }
 
-function createMsgLog(msg, type) {
-    const date = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
-    const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-
-    const msg_log = {
-        date: date,
-        time: time,
-        msg: msg,
-        type: "sent",
-        attachments: false,
-        situation: "unread",
-        images: [],
-        videos: [],
-        documents: [],
-        links: []
-    };
-    
-    if (type === 'group') {
-        msg_log.by = my_profile.name;
-    }
-
-    return msg_log;
-}
-
-function sendMessage(msg, data, type, index) {
-    const msg_log = createMsgLog(msg, type);    
-
-    data.chat_log.push(msg_log);
-
-    saveDataToLocalStorage('wpData', wpData);
-
-    init();
-    DetailsChange(type, index);
-}
-
-function sendImage(caption, data, type, index, img_path) {
-    const msg_log = createMsgLog(caption, type);
-
-    msg_log.attachments = true;
-
-    image_log = {path : img_path};
-    msg_log.images.push(image_log);
-    
-    data.chat_log.push(msg_log);
-
-    saveDataToLocalStorage('wpData', wpData);
-
-    init();
-    DetailsChange(type, index);
-}
-
-function sendVideo(caption, data, type, index, video_path) {
-    const msg_log = createMsgLog(caption, type);
-
-    msg_log.attachments = true;
-
-    video_log = {path : video_path};
-    msg_log.videos.push(video_log);
-    
-    data.chat_log.push(msg_log);
-
-    saveDataToLocalStorage('wpData', wpData);
-
-    init();
-    DetailsChange(type, index);
-}
-
 function createChatHTML(chat, type) {
     currdate = '';
     const chatlogs = chat.chat_log.map(log => createMessageHTML(log, type)).reverse().join('');
@@ -640,7 +611,7 @@ function createChatHTML(chat, type) {
                     </button>
                 </div>
 
-                ${editImage()}
+                ${editImageHTML()}
             </div>
         </div>
 
@@ -648,7 +619,7 @@ function createChatHTML(chat, type) {
             <div class="btns">
                 <img src="./images/icons/cancel.png" class="close">
             </div>
-            ${editImage()}
+            ${editImageHTML()}
         </div>
 
         <div class="msg-box">
@@ -696,6 +667,7 @@ function createChatHTML(chat, type) {
                     </li>
                 </ul>
                 <input type="file" id="pv-upload" style="display: none;">
+                <input type="file" id="doc-upload" style="display: none;">
             </div>
             <div class="btns">
                 <img src="./images/icons/emoji.png">
@@ -713,27 +685,83 @@ function createChatHTML(chat, type) {
     `;
 }
 
-function editImage() {
-    return `
-    <div class="edit-image">
-        <div class="edit-row">
 
-        </div>
-        <video class="v" style="display: none;" controls mute autoplay></video>
-        <canvas class="pv" width="640" height="480"></canvas>
-        <div class="send-footer">
-            <div class="type-caption">
-                <input autocomplete="off" type="text" placeholder="Add a caption" class="white-bg send-caption">
-            </div>
-            <div class="btns">
-                <img src="./images/icons/view-once.png">
-            </div>
-            <button class="send-pv">
-                <img src="./images/icons/send-white.png">
-            </button>
-        </div>
-    </div>
-    `;
+function createMsgLog(msg, type) {
+    const date = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
+    const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+    const msg_log = {
+        date: date,
+        time: time,
+        msg: msg,
+        type: "sent",
+        situation: "unread",
+    };
+    
+    if (type === 'group') {
+        msg_log.by = my_profile.name;
+    }
+
+    return msg_log;
+}
+
+function sendMessage(msg, data, type, index) {
+    const msg_log = createMsgLog(msg, type);    
+
+    data.chat_log.push(msg_log);
+
+    saveDataToLocalStorage('wpData', wpData);
+
+    init();
+    DetailsChange(type, index);
+}
+
+function sendImage(caption, data, type, index, img_path) {
+    const msg_log = createMsgLog(caption, type);
+
+    msg_log.attachments = true;
+
+    image_log = {path : img_path};
+    msg_log.images.push(image_log);
+    
+    data.chat_log.push(msg_log);
+
+    saveDataToLocalStorage('wpData', wpData);
+
+    init();
+    DetailsChange(type, index);
+}
+
+function sendVideo(caption, data, type, index, video_path) {
+    const msg_log = createMsgLog(caption, type);
+
+    msg_log.attachments = true;
+
+    video_log = {path : video_path};
+    msg_log.videos.push(video_log);
+    
+    data.chat_log.push(msg_log);
+
+    saveDataToLocalStorage('wpData', wpData);
+
+    init();
+    DetailsChange(type, index);
+}
+
+function sendDoc(caption, data, type, index, doc_path) {
+    const msg_log = createMsgLog(caption, type);
+
+    msg_log.attachments = true;
+
+    doc_log = {path : doc_path};
+    msg_log.documents.push(doc_log);
+    
+    data.chat_log.push(msg_log);
+
+    saveDataToLocalStorage('wpData', wpData);
+
+    init();
+    DetailsChange(type, index);
 }
 
 
@@ -747,7 +775,23 @@ $(".msg-row .menu-hover").each(function() {
 
 //Document
 function uploadDoc() {
+    $(".doc-menu").hide();
+    $(".menu-attach").removeClass("clicked");
 
+    $("#doc-upload").off('change');
+    $("#doc-upload").click();
+
+    $("#doc-upload").change((event) => {
+        const file = event.target.files[0];
+        if (file) {
+            console.log(file.name);
+        }
+    });
+
+    $(".pv-upload-tab .close").click(function() {
+        $(this).closest(".pv-upload-tab").hide();
+        $(".msg-box, .chat-screen .footer").show();
+    });
 }
 
 //Photos & Videos
