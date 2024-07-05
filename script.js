@@ -1,26 +1,11 @@
-// function saveDataToLocalStorage(key, data) {
-//     try {
-//         localStorage.setItem(key, JSON.stringify(data));
-//     }
-//     catch (e) {
-//         if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
-//             console.error('Local storage quota exceeded.');
-//             // Optionally, handle the error by clearing old items or notifying the user
-//         }
-//     }
-// }
-
 function saveDataToLocalStorage(key, data) {
     try {
-        console.log("Saving data to local storage:", key, data); // Log the key and data
         localStorage.setItem(key, JSON.stringify(data));
     }
     catch (e) {
         if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
             console.error('Local storage quota exceeded.');
-        } 
-        else {
-            console.error('Error saving to local storage:', e);
+            // Optionally, handle the error by clearing old items or notifying the user
         }
     }
 }
@@ -695,7 +680,12 @@ function createMsgLog(msg, type) {
         time: time,
         msg: msg,
         type: "sent",
+        attachments: true,
         situation: "unread",
+        images: [],
+        videos: [],
+        documents: [],
+        links: []
     };
     
     if (type === 'group') {
