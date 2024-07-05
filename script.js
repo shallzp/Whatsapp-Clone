@@ -391,11 +391,11 @@ function DetailsChange(type, index) {
     });
 
     $(".attach-doc").click(() => {
-        openCamera(data, type, index);
+        uploadDoc();
     });
 
     $(".attach-pv").click(() => {
-        openCamera(data, type, index);
+        uploadPV(data, type, index);
     });
 
     $(".attach-pv-click").click(() => {
@@ -557,6 +557,22 @@ function sendImage(caption, data, type, index, img_path) {
     DetailsChange(type, index);
 }
 
+function sendImage(caption, data, type, index, video_path) {
+    const msg_log = createMsgLog(caption, type);
+
+    msg_log.attachments = true;
+
+    video_log = {path : video_path};
+    msg_log.videos.push(video_log);
+    
+    data.chat_log.push(msg_log);
+
+    saveDataToLocalStorage('wpData', wpData);
+
+    init();
+    DetailsChange(type, index);
+}
+
 function createChatHTML(chat, type) {
     currdate = '';
     const chatlogs = chat.chat_log.map(log => createMessageHTML(log, type)).reverse().join('');
@@ -615,25 +631,16 @@ function createChatHTML(chat, type) {
                         <img src="./images/icons/camera.png">
                     </button>
                 </div>
-                
-                <div class="edit-snapped">
-                    <div class="edit-row">
 
-                    </div>
-                    <canvas class="snapped" width="640" height="480"></canvas>
-                    <div class="send-footer">
-                        <div class="type-caption">
-                            <input autocomplete="off" type="text" placeholder="Add a caption" class="white-bg send-caption">
-                        </div>
-                        <div class="btns">
-                            <img src="./images/icons/view-once.png">
-                        </div>
-                        <button class="send-snapped">
-                            <img src="./images/icons/send-white.png">
-                        </button>
-                    </div>
-                </div>
+                ${editImage()}
             </div>
+        </div>
+
+        <div class="pv-upload-tab">
+            <div class="btns">
+                <img src="./images/icons/cancel.png" class="close">
+            </div>
+            ${editImage()}
         </div>
 
         <div class="msg-box">
@@ -680,6 +687,7 @@ function createChatHTML(chat, type) {
                         </div>
                     </li>
                 </ul>
+                <input type="file" id="pv-upload" style="display: none;">
             </div>
             <div class="btns">
                 <img src="./images/icons/emoji.png">
@@ -697,6 +705,28 @@ function createChatHTML(chat, type) {
     `;
 }
 
+function editImage() {
+    return `
+    <div class="edit-image">
+        <div class="edit-row">
+
+        </div>
+        <canvas class="pv" width="640" height="480"></canvas>
+        <div class="send-footer">
+            <div class="type-caption">
+                <input autocomplete="off" type="text" placeholder="Add a caption" class="white-bg send-caption">
+            </div>
+            <div class="btns">
+                <img src="./images/icons/view-once.png">
+            </div>
+            <button class="send-pv">
+                <img src="./images/icons/send-white.png">
+            </button>
+        </div>
+    </div>
+    `;
+}
+
 
 //Msg box
 $(".msg-row .menu-hover").each(function() {
@@ -704,6 +734,76 @@ $(".msg-row .menu-hover").each(function() {
         $(this).siblings(".menu").toggle();
     });
 });
+
+
+//Document
+function uploadDoc() {
+
+}
+
+//Photos & Videos
+function uploadPV(data, type, index) {
+    $("#pv-upload").attr("accept", ".jpg,.jpeg,.png,.mp4,.mkv");
+    
+    $("#pv-upload").off('change');
+
+    $("#pv-upload").click();
+
+    $(".doc-menu").hide();
+    $(".menu-attach").removeClass("clicked");
+
+    $("#pv-upload").change((event) => {
+        const file = event.target.files[0];
+        if (file) {
+            $(".msg-box, .chat-screen .footer").hide()
+            $(".pv-upload-tab").show();
+
+            const canvas = $(".pv-upload-tab").find(".pv")[0];
+            const context = canvas.getContext("2d");
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const result = e.target.result;
+
+                if (file.type.startsWith("image/")) {
+                    const img = new Image();
+                    img.onload = () => {
+                        context.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    };
+                    img.src = result;
+
+                    $(".pv-upload-tab .send-pv").click(() => {
+                        const caption = $(".pv-upload-tab").find("input").val();
+                    
+                        sendImage(caption, data, type, index, img.src);
+                        $(".pv-upload-tab").find("input").val("");
+                    });
+                } 
+                else if (file.type.startsWith("video/")) {
+                    const video = document.createElement("video");
+                    video.src = result;
+                    video.oncanplay = () => {
+                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    };
+                    video.load();
+
+                    $(".pv-upload-tab .send-pv").off('click').on('click', () => {
+                        const caption = $(".pv-upload-tab").find("input").val();
+                        sendVideo(caption, data, type, index, video.src);
+                        $(".pv-upload-tab").find("input").val("");
+                    });
+                }
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+
+    $(".pv-upload-tab .close").click(function() {
+        $(this).closest(".pv-upload-tab").hide();
+        $(".msg-box, .chat-screen .footer").show();
+    });
+}
 
 
 //Camera
@@ -754,6 +854,7 @@ function openCamera(data, type, index) {
 
     startCamera();
     $(".cam-tab").show();
+    $(".edit-image").hide();
 
     $(".msg-box, .chat-screen .footer").hide();
 
@@ -763,17 +864,17 @@ function openCamera(data, type, index) {
         $(".msg-box, .chat-screen .footer").show();
     });
 
-    const canvas = $(".snapped")[0];
+    const canvas = $(".pv")[0];
     const context = canvas.getContext('2d');
     const video = $('#cam')[0];
 
     $(".click").click(() => {
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         $(".snap-image").hide();
-        $(".edit-snapped").show();
+        $(".edit-image").show();
     });
 
-    $(".camera-click .send-snapped").click(function() {
+    $(".camera-click .send-pv").click(function() {
         const snap = canvas.toDataURL('image/png');
     
         if (vidStream) {

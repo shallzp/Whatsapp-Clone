@@ -745,7 +745,6 @@ img.open-menu {
     border-radius: 8px;
     box-shadow: 0 1px .5px rgba(0, 0, 0, .13);
     position: relative;
-    align-items: center;
     z-index: 10;
     max-width: fit-content;
 }
@@ -1067,19 +1066,37 @@ img.open-menu {
     justify-content: center;
 }
 
+.camera-click .send-pv {
+    right: 50px;
+}
+
 .click {
     bottom: 50px;
 }
 
-.camera-click .edit-snapped {
+.camera-click .edit-image {
+    padding-top: 10px;
+}
+
+.pv-upload-tab {
+    display: none;
+    position: relative;
+}
+
+.pv-upload-tab .close {
+    position: absolute;
+    left: 50px;
+    top: 100px;
+}
+
+.edit-image {
     width: 100%;
-    padding: 10px 0 50px 0;
+    padding-bottom: 50px;
     margin-top: 60px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* display: none; */
 }
 
 .camera-click canvas {
@@ -1089,7 +1106,13 @@ img.open-menu {
     transform: scaleX(-1);
 }
 
-.camera-click .send-footer {
+.edit-image canvas {
+    margin: 50px;
+    width: 340px;
+    height: 250px;
+}
+
+.send-footer {
     width: 100%;
     display: flex;
     align-items: center;
@@ -1097,11 +1120,11 @@ img.open-menu {
     gap: 10px;
 }
 
-.camera-click .send-footer .type-caption {
+.send-footer .type-caption {
     width: 60%;
 }
 
-.camera-click input {
+.edit-image input {
     border: none;
     outline: none;
     border-radius: 8px;
@@ -1113,10 +1136,17 @@ img.open-menu {
     width: 96%;
 }
 
-.camera-click .send-footer .send-snapped {
-    right: 50px;
+.send-pv {
     padding: 18px;
     border-radius: 35px;
+    border: none;
+    background-color: #008069;
+}
+
+.pv-upload-tab .send-pv {
+    position: absolute;
+    right: 50px;
+    bottom: 50px;
 }
 
 
