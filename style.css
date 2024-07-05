@@ -788,6 +788,73 @@ img.open-menu {
     margin: 3px;
 }
 
+.msg .docm {
+    background-color: #D1F4CC;
+    margin: 3px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    min-width: 280px;
+}
+
+/* Not using this now */
+/* .msg .docm .doc-bg-img {
+    background-image: url(./data/attachments/images/1.png);
+    background-size: cover;
+    height: 100px;
+    min-width: 300px;
+    border-top-right-radius: inherit;
+    border-top-left-radius: inherit;
+} */
+
+.msg .docm .doc-info {
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.msg:not(:has(.msg-text)) .docm .doc-info {
+    padding-bottom: 20px;
+}
+
+.doc-info .data {
+    display: flex;
+    flex-direction: column;
+    width: 58%;
+    font-size: 14px;
+    line-height: 19px;
+}
+
+.doc-info .data .down {
+    display: flex;
+    gap: 10px;
+    align-items: left;
+    color: #54656F;
+    font-size: 11px;
+}
+
+.docm img {
+    height: 32px;
+    width: 32px;
+}
+
+.docm .btns {
+    border: #54656F 1px solid;
+    border-radius: 25px;
+    padding: 8px;
+}
+
+.docm .btns img {
+    height: 20px;
+    width: 20px;
+}
+
+.msg .docm a {
+    text-decoration: none;
+    color: black;
+}
+
 .msg.sent {
     background-color: #D9FDD3;
     margin-left: auto;
@@ -1078,11 +1145,11 @@ img.open-menu {
     padding-top: 10px;
 }
 
-.pv-upload-tab {
+.pv-upload-tab, .doc-upload-tab {
     display: none;
 }
 
-.pv-upload-tab .close {
+.pv-upload-tab .close, .doc-upload-tab {
     position: absolute;
     left: 50px;
     top: 100px;
@@ -1147,7 +1214,7 @@ img.open-menu {
     background-color: #008069;
 }
 
-.pv-upload-tab .send-pv {
+.pv-upload-tab .send-pv , .doc-upload-tab .send-pv {
     position: absolute;
     right: 50px;
     bottom: 50px;

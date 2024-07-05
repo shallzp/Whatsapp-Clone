@@ -437,6 +437,7 @@ function editImageHTML() {
         <div class="edit-row">
 
         </div>
+        <div class="d" style="display: none;"></div>
         <video class="v" style="display: none;" controls mute autoplay></video>
         <canvas class="pv" width="640" height="480"></canvas>
         <div class="send-footer">
@@ -473,7 +474,32 @@ function createMessageHTML(log, type) {
         }
         if (log.documents && log.documents.length > 0) {
             log.documents.forEach(document => {
-                attachmentHTML += `<a href="${document.path}" class="attachment" download>${document.name}</a>`;
+                attachmentHTML += `
+                <div class="attachment docm" role="button">
+                    <div class="doc-info">
+                        <div class="type-img">
+                            <img src="./images/icons/${document.type}.png">
+                        </div>
+                        <div class="data">
+                            <div class="up">${document.name}</div>
+                            <div class="down">
+                                <div class="pages">
+                                    ${document.pg_count} pages
+                                </div>
+                                <div class="type">
+                                    ${document.type}
+                                </div>
+                                <div class="size">
+                                    ${document.size}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btns">
+                            <img src="./images/icons/download.png">
+                        </div>
+                    </div>
+                </div>
+                `;
             });
         }
         if (log.links && log.links.length > 0) {
@@ -607,6 +633,13 @@ function createChatHTML(chat, type) {
             ${editImageHTML()}
         </div>
 
+        <div class="doc-upload-tab">
+            <div class="btns">
+                <img src="./images/icons/cancel.png" class="close">
+            </div>
+            ${editImageHTML()}
+        </div>
+
         <div class="msg-box">
             ${chatlogs}
         </div>
@@ -680,7 +713,7 @@ function createMsgLog(msg, type) {
         time: time,
         msg: msg,
         type: "sent",
-        attachments: true,
+        attachments: false,
         situation: "unread",
         images: [],
         videos: [],
@@ -738,12 +771,18 @@ function sendVideo(caption, data, type, index, video_path) {
     DetailsChange(type, index);
 }
 
-function sendDoc(caption, data, type, index, doc_path) {
+function sendDoc(caption, data, type, index, doc_path, filetype, filename, filesize) {
     const msg_log = createMsgLog(caption, type);
 
     msg_log.attachments = true;
 
-    doc_log = {path : doc_path};
+    doc_log = {
+        path: doc_path,
+        type: filetype,
+        name: filename,
+        pg_count: 1,
+        size: filesize
+    };
     msg_log.documents.push(doc_log);
     
     data.chat_log.push(msg_log);
@@ -768,18 +807,40 @@ function uploadDoc() {
     $(".doc-menu").hide();
     $(".menu-attach").removeClass("clicked");
 
+
+    $("#doc-upload").attr("accept", ".pdf,.docx,.xlsx,.pptx,.zip,.txt");
     $("#doc-upload").off('change');
     $("#doc-upload").click();
 
     $("#doc-upload").change((event) => {
         const file = event.target.files[0];
         if (file) {
-            console.log(file.name);
+
+            const reader = new FileReader();
+
+            reader.readAsDataURL(file);
+
+            const name = file.name;
+            const ftype = file.name.split('.')[1].toUpperCase();
+            const size = file.size;
+
+            reader.onload = (e) => {
+                const result = e.target.result;
+
+                if (file.type.startsWith("application/")) {
+
+                    $(".doc-upload-tab .send-pv").off('click').on('click', () => {
+                        const caption = $(".doc-upload-tab").find("input").val();
+                        sendDoc(caption, data, type, index, result, ftype, name, size);
+                        $(".doc-upload-tab").find("input").val("");
+                    });
+                }   
+            }
         }
     });
 
-    $(".pv-upload-tab .close").click(function() {
-        $(this).closest(".pv-upload-tab").hide();
+    $(".doc-upload-tab .close").click(function() {
+        $(this).closest(".doc-upload-tab").hide();
         $(".msg-box, .chat-screen .footer").show();
     });
 }
@@ -789,7 +850,7 @@ function uploadPV(data, type, index) {
     $(".doc-menu").hide();
     $(".menu-attach").removeClass("clicked");
 
-    $("#pv-upload").attr("accept", ".jpg,.jpeg,.png,.mp4");
+    c
     $("#pv-upload").off('change');
     $("#pv-upload").click();
 
