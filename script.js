@@ -1,5 +1,13 @@
 function saveDataToLocalStorage(key, data) {
-    localStorage.setItem(key, JSON.stringify(data));
+    try {
+        localStorage.setItem(key, JSON.stringify(data));
+    }
+    catch (e) {
+        if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+            console.error('Local storage quota exceeded.');
+            // Optionally, handle the error by clearing old items or notifying the user
+        }
+    }
 }
 
 function getDataFromLocalStorage(key) {
@@ -557,7 +565,7 @@ function sendImage(caption, data, type, index, img_path) {
     DetailsChange(type, index);
 }
 
-function sendImage(caption, data, type, index, video_path) {
+function sendVideo(caption, data, type, index, video_path) {
     const msg_log = createMsgLog(caption, type);
 
     msg_log.attachments = true;
@@ -711,6 +719,7 @@ function editImage() {
         <div class="edit-row">
 
         </div>
+        <video class="v" style="display: none;" controls mute autoplay></video>
         <canvas class="pv" width="640" height="480"></canvas>
         <div class="send-footer">
             <div class="type-caption">
@@ -743,59 +752,63 @@ function uploadDoc() {
 
 //Photos & Videos
 function uploadPV(data, type, index) {
-    $("#pv-upload").attr("accept", ".jpg,.jpeg,.png,.mp4,.mkv");
-    
-    $("#pv-upload").off('change');
-
-    $("#pv-upload").click();
-
     $(".doc-menu").hide();
     $(".menu-attach").removeClass("clicked");
+
+    $("#pv-upload").attr("accept", ".jpg,.jpeg,.png,.mp4");
+    $("#pv-upload").off('change');
+    $("#pv-upload").click();
 
     $("#pv-upload").change((event) => {
         const file = event.target.files[0];
         if (file) {
-            $(".msg-box, .chat-screen .footer").hide()
+            $(".msg-box, .chat-screen .footer").hide();
             $(".pv-upload-tab").show();
 
             const canvas = $(".pv-upload-tab").find(".pv")[0];
             const context = canvas.getContext("2d");
+            const videoElement = $(".pv-upload-tab").find(".v")[0];
 
             const reader = new FileReader();
+
+            reader.readAsDataURL(file);
+
             reader.onload = (e) => {
                 const result = e.target.result;
 
                 if (file.type.startsWith("image/")) {
+                    $(".pv-upload-tab canvas").show();
+                    $(".pv-upload-tab .v").hide();
+
                     const img = new Image();
                     img.onload = () => {
+                        context.clearRect(0, 0, canvas.width, canvas.height);
                         context.drawImage(img, 0, 0, canvas.width, canvas.height);
                     };
                     img.src = result;
 
-                    $(".pv-upload-tab .send-pv").click(() => {
+                    $(".pv-upload-tab .send-pv").off('click').on('click', () => {
                         const caption = $(".pv-upload-tab").find("input").val();
-                    
+
                         sendImage(caption, data, type, index, img.src);
                         $(".pv-upload-tab").find("input").val("");
                     });
                 } 
                 else if (file.type.startsWith("video/")) {
-                    const video = document.createElement("video");
-                    video.src = result;
-                    video.oncanplay = () => {
-                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    };
-                    video.load();
+                    console.log("Handling video file.");
+
+                    $(".pv-upload-tab canvas").hide();
+                    $(".pv-upload-tab .v").show();
+
+                    videoElement.src = result;
 
                     $(".pv-upload-tab .send-pv").off('click').on('click', () => {
                         const caption = $(".pv-upload-tab").find("input").val();
-                        sendVideo(caption, data, type, index, video.src);
+                        sendVideo(caption, data, type, index, videoElement.src);
                         $(".pv-upload-tab").find("input").val("");
                     });
                 }
             };
-
-            reader.readAsDataURL(file);
         }
     });
 
@@ -804,6 +817,70 @@ function uploadPV(data, type, index) {
         $(".msg-box, .chat-screen .footer").show();
     });
 }
+
+
+// function uploadPV(data, type, index) {
+//     $("#pv-upload").attr("accept", ".jpg,.jpeg,.png,.mp4,.mkv");
+    
+//     $("#pv-upload").off('change');
+
+//     $("#pv-upload").click();
+
+//     $(".doc-menu").hide();
+//     $(".menu-attach").removeClass("clicked");
+
+//     $("#pv-upload").change((event) => {
+//         const file = event.target.files[0];
+//         if (file) {
+//             $(".msg-box, .chat-screen .footer").hide()
+//             $(".pv-upload-tab").show();
+
+//             const canvas = $(".pv-upload-tab").find(".pv")[0];
+//             const context = canvas.getContext("2d");
+
+//             const reader = new FileReader();
+//             reader.onload = (e) => {
+//                 const result = e.target.result;
+
+//                 if (file.type.startsWith("image/")) {
+//                     const img = new Image();
+//                     img.onload = () => {
+//                         context.drawImage(img, 0, 0, canvas.width, canvas.height);
+//                     };
+//                     img.src = result;
+
+//                     $(".pv-upload-tab .send-pv").click(() => {
+//                         const caption = $(".pv-upload-tab").find("input").val();
+                    
+//                         sendImage(caption, data, type, index, img.src);
+//                         $(".pv-upload-tab").find("input").val("");
+//                     });
+//                 } 
+//                 else if (file.type.startsWith("video/")) {
+//                     const video = document.createElement("video");
+//                     video.src = result;
+//                     video.oncanplay = () => {
+//                         context.drawImage(video, 0, 0, canvas.width, canvas.height);
+//                     };
+//                     video.load();
+
+//                     $(".pv-upload-tab .send-pv").off('click').on('click', () => {
+//                         const caption = $(".pv-upload-tab").find("input").val();
+//                         sendVideo(caption, data, type, index, video.src);
+//                         $(".pv-upload-tab").find("input").val("");
+//                     });
+//                 }
+//             };
+
+//             reader.readAsDataURL(file);
+//         }
+//     });
+
+//     $(".pv-upload-tab .close").click(function() {
+//         $(this).closest(".pv-upload-tab").hide();
+//         $(".msg-box, .chat-screen .footer").show();
+//     });
+// }
 
 
 //Camera
