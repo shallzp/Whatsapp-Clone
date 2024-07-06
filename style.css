@@ -94,7 +94,7 @@ body {
 }
 
 .my-profile {
-    background-image: url(./images/my-profile.jpg);
+    background-image: url(./data/profiles/sahil.png);
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -1233,6 +1233,11 @@ img.open-menu {
     overflow-y: auto;
     overflow-x: hidden;
     display: none;
+}
+
+.profile-info .user {
+    height: 100px;
+    width: 100px;
 }
 
 .profile-info p, .profile-info span {

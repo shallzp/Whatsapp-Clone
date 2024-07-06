@@ -355,14 +355,15 @@ function DetailsChange(type, index) {
     let data;
     if (type === 'group') {
         data = my_profile.groups[index];
-    } else if (type === 'contact') {
+    } 
+    else if (type === 'contact') {
         data = my_profile.contacts[index];
     }
 
     $("#details").html(createChatHTML(data, type));
 
     $(".chat-screen .header .left").on("click", function() {
-        initProfileInfo(data);
+        initProfileInfo(data, type);
         $(".profile-info").show();
         $("#details").css("width", "calc((100vw - 29vw - 60px)/2 + 42px)");
     });
@@ -1209,7 +1210,7 @@ function close(element) {
 
 
 //Profile info
-function initProfileInfo(chat) {
+function initProfileInfo(chat, type) {
     function countAttachments(chat) {
         let totalImages = 0;
         let totalVideos = 0;
