@@ -1141,7 +1141,7 @@ img.open-menu {
     bottom: 50px;
 }
 
-.camera-click .edit-image {
+.camera-click .edit-image, .camera-click .edit-doc {
     padding-top: 10px;
 }
 
@@ -1149,13 +1149,13 @@ img.open-menu {
     display: none;
 }
 
-.pv-upload-tab .close, .doc-upload-tab {
+.pv-upload-tab .close, .doc-upload-tab .close {
     position: absolute;
     left: 50px;
     top: 100px;
 }
 
-.edit-image {
+.edit-image, .edit-doc {
     width: 100%;
     padding-bottom: 50px;
     margin-top: 60px;
@@ -1170,6 +1170,24 @@ img.open-menu {
     width: 340px;
     height: 180px;
     transform: scaleX(-1);
+}
+
+.edit-doc .d-pdf, .edit-doc .d {
+    display: none;
+    margin: 40px;
+    height: 250px;
+    width: 350px;
+}
+
+.edit-doc .d {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(0, 0, 0, 0.1);
+    color: #FFFFFF;
+    font-size: 32px;
+    font-weight: 500;
 }
 
 .edit-image canvas {
@@ -1195,7 +1213,7 @@ img.open-menu {
     width: 60%;
 }
 
-.edit-image input {
+.edit-image input, .edit-doc input {
     border: none;
     outline: none;
     border-radius: 8px;

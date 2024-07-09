@@ -400,7 +400,7 @@ function DetailsChange(type, index) {
     });
 
     $(".attach-doc").click(() => {
-        uploadDoc();
+        uploadDoc(data, type, index);
     });
 
     $(".attach-pv").click(() => {
@@ -429,8 +429,41 @@ function DetailsChange(type, index) {
             $(this).closest(".footer").find(".send-msg").val("");
         }
     });
+
+    $(".attachment.docm .btns.download").click(function() {
+        const filename = $(this).closest(".data").find(".up").val();
+        if (data.chat_log[data.chat_log.length - 1].documents.name === filename) {
+            const path = data.chat_log[data.chat_log.length - 1].documents.path;
+            window.location.href = path;
+        }
+    });
 }
 
+
+function editDocHTML() {
+    return `
+    <div class="edit-doc">
+        <div class="edit-row">
+
+        </div>
+        <div class="d">
+            No file preview
+        </div>
+        <iframe src="" frameborder=0 class="d-pdf"></iframe>
+        <div class="send-footer">
+            <div class="type-caption">
+                <input autocomplete="off" type="text" placeholder="Add a caption" class="white-bg send-caption">
+            </div>
+            <div class="btns">
+                <img src="./images/icons/view-once.png">
+            </div>
+            <button class="send-pv">
+                <img src="./images/icons/send-white.png">
+            </button>
+        </div>
+    </div>
+    `;
+}
 
 function editImageHTML() {
     return `
@@ -495,7 +528,7 @@ function createMessageHTML(log, type) {
                                 </div>
                             </div>
                         </div>
-                        <div class="btns">
+                        <div class="btns download">
                             <img src="./images/icons/download.png">
                         </div>
                     </div>
@@ -627,14 +660,14 @@ function createChatHTML(chat, type) {
             </div>
         </div>
 
-        <div class="pv-upload-tab">
+        <div class="doc-upload-tab">
             <div class="btns">
                 <img src="./images/icons/cancel.png" class="close">
             </div>
-            ${editImageHTML()}
+            ${editDocHTML()}
         </div>
 
-        <div class="doc-upload-tab">
+        <div class="pv-upload-tab">
             <div class="btns">
                 <img src="./images/icons/cancel.png" class="close">
             </div>
@@ -804,10 +837,9 @@ $(".msg-row .menu-hover").each(function() {
 
 
 //Document
-function uploadDoc() {
+function uploadDoc(data, type, index) {
     $(".doc-menu").hide();
     $(".menu-attach").removeClass("clicked");
-
 
     $("#doc-upload").attr("accept", ".pdf,.docx,.xlsx,.pptx,.zip,.txt");
     $("#doc-upload").off('change');
@@ -816,27 +848,34 @@ function uploadDoc() {
     $("#doc-upload").change((event) => {
         const file = event.target.files[0];
         if (file) {
+            console.log(file);
+            $(".msg-box, .chat-screen .footer").hide();
+            $(".doc-upload-tab").show();
 
             const reader = new FileReader();
-
             reader.readAsDataURL(file);
 
             const name = file.name;
-            const ftype = file.name.split('.')[1].toUpperCase();
+            const ftype = file.name.split('.').pop().toUpperCase();
             const size = file.size;
 
             reader.onload = (e) => {
                 const result = e.target.result;
 
-                if (file.type.startsWith("application/")) {
+                if (file.type.startsWith("application/pdf")) {
+                    $(".doc-upload-tab .d").hide();
+                    $(".doc-upload-tab .d-pdf").show().prop("src", result);
+                } else if (file.type.startsWith("application/")) {
+                    $(".doc-upload-tab .d").show();
+                    $(".doc-upload-tab .d-pdf").hide();
+                }
 
-                    $(".doc-upload-tab .send-pv").off('click').on('click', () => {
-                        const caption = $(".doc-upload-tab").find("input").val();
-                        sendDoc(caption, data, type, index, result, ftype, name, size);
-                        $(".doc-upload-tab").find("input").val("");
-                    });
-                }   
-            }
+                $(".doc-upload-tab .send-pv").off('click').on('click', () => {
+                    const caption = $(".doc-upload-tab").find("input").val();
+                    sendDoc(caption, data, type, index, result, ftype, name, size);
+                    $(".doc-upload-tab").find("input").val("");
+                });
+            };
         }
     });
 
@@ -845,6 +884,7 @@ function uploadDoc() {
         $(".msg-box, .chat-screen .footer").show();
     });
 }
+
 
 //Photos & Videos
 function uploadPV(data, type, index) {
@@ -915,68 +955,6 @@ function uploadPV(data, type, index) {
 }
 
 
-// function uploadPV(data, type, index) {
-//     $("#pv-upload").attr("accept", ".jpg,.jpeg,.png,.mp4,.mkv");
-    
-//     $("#pv-upload").off('change');
-
-//     $("#pv-upload").click();
-
-//     $(".doc-menu").hide();
-//     $(".menu-attach").removeClass("clicked");
-
-//     $("#pv-upload").change((event) => {
-//         const file = event.target.files[0];
-//         if (file) {
-//             $(".msg-box, .chat-screen .footer").hide()
-//             $(".pv-upload-tab").show();
-
-//             const canvas = $(".pv-upload-tab").find(".pv")[0];
-//             const context = canvas.getContext("2d");
-
-//             const reader = new FileReader();
-//             reader.onload = (e) => {
-//                 const result = e.target.result;
-
-//                 if (file.type.startsWith("image/")) {
-//                     const img = new Image();
-//                     img.onload = () => {
-//                         context.drawImage(img, 0, 0, canvas.width, canvas.height);
-//                     };
-//                     img.src = result;
-
-//                     $(".pv-upload-tab .send-pv").click(() => {
-//                         const caption = $(".pv-upload-tab").find("input").val();
-                    
-//                         sendImage(caption, data, type, index, img.src);
-//                         $(".pv-upload-tab").find("input").val("");
-//                     });
-//                 } 
-//                 else if (file.type.startsWith("video/")) {
-//                     const video = document.createElement("video");
-//                     video.src = result;
-//                     video.oncanplay = () => {
-//                         context.drawImage(video, 0, 0, canvas.width, canvas.height);
-//                     };
-//                     video.load();
-
-//                     $(".pv-upload-tab .send-pv").off('click').on('click', () => {
-//                         const caption = $(".pv-upload-tab").find("input").val();
-//                         sendVideo(caption, data, type, index, video.src);
-//                         $(".pv-upload-tab").find("input").val("");
-//                     });
-//                 }
-//             };
-
-//             reader.readAsDataURL(file);
-//         }
-//     });
-
-//     $(".pv-upload-tab .close").click(function() {
-//         $(this).closest(".pv-upload-tab").hide();
-//         $(".msg-box, .chat-screen .footer").show();
-//     });
-// }
 
 
 //Camera
