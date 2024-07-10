@@ -97,7 +97,10 @@ $("#master .heading img").each(function(index) {
         if (index === 1) {
             $("#master .header .menu").toggle();
         } 
-        $(this).toggleClass("clicked");
+        $(this).addClass("clicked");
+        setInterval(() => {
+            $(this).removeClass("clicked"); 
+        }, 1000);
     });
 });
 
@@ -382,21 +385,37 @@ function DetailsChange(type, index) {
     });
 
     $(".search-chat").on("click", function() {
-        $(this).toggleClass("clicked");
+        $(this).addClass("clicked");
+        setInterval(() => {
+            $(this).removeClass("clicked"); 
+        }, 1000);
+
         $(".search-tab").append(initSearchTab(data));
         $(".search-tab").show();
         $("#details").css("width", "calc((100vw - 29vw - 60px)/2 + 42px)");
+
+        $(".search-tab .search-header .close").click(function() {
+            close($(this).closest(".search-tab"));
+            $("#details").css("width", "calc(100vw - 29vw - 60px)");
+        });
     });
 
     $(".chat-screen .header .menu-btn").click(function() {
         $(".chat-screen .header .menu").toggle();
-        $(this).toggleClass("clicked");
+        $(this).addClass("clicked");
+        setInterval(() => {
+            $(this).removeClass("clicked"); 
+        }, 1000);
     });
 
     initializeCall(data, type);
 
     $(".menu-attach").on("click", function() {
-        $(this).toggleClass("clicked");
+        $(this).addClass("clicked");
+        setInterval(() => {
+            $(this).removeClass("clicked"); 
+        }, 1000);
+
         $(".doc-menu").toggle();
     });
 
@@ -1362,11 +1381,6 @@ function initProfileInfo(chat, type) {
         initMediaPage(chat);
         $(".media-page").show();
         $(".profile-info").hide();
-
-        $(".media-page .close").click(() => {
-            close($(this).closest(".media-page"));
-            $("#details").css("width", "calc(100vw - 29vw - 60px)");
-        });
     });
 }
 
