@@ -190,6 +190,7 @@ wpData = {
                 date: "27-06-2024",
                 time: "03:22 PM",
                 type: "sent",
+                msg: "",
                 attachments: true,
                 situation: "unread",
                 images: [],

@@ -189,7 +189,8 @@ function masterChatLogs() {
         if ($(this).val().trim().length > 0) {
             $('.back').show();
             $('.search-icon').hide();
-        } else {
+        } 
+        else {
             $('.back').hide();
             $('.search-icon').show();
         }
@@ -810,12 +811,26 @@ function sendDoc(caption, data, type, index, doc_path, filetype, filename, files
 
     msg_log.attachments = true;
 
+    function convertFileSize(filesize) {
+        let kb = filesize / 1024;
+        let mb = kb / 1024;
+        let gb = mb / 1024;
+    
+        if (gb >= 1) {
+            return gb.toFixed(2) + ' GB';
+        } else if (mb >= 1) {
+            return mb.toFixed(2) + ' MB';
+        } else {
+            return kb.toFixed(2) + ' KB';
+        }
+    }
+
     doc_log = {
         path: doc_path,
         type: filetype,
         name: filename,
         pg_count: 1,
-        size: filesize
+        size: convertFileSize(filesize)
     };
     msg_log.documents.push(doc_log);
     
@@ -891,7 +906,6 @@ function uploadPV(data, type, index) {
     $(".doc-menu").hide();
     $(".menu-attach").removeClass("clicked");
 
-    c
     $("#pv-upload").off('change');
     $("#pv-upload").click();
 
@@ -1194,7 +1208,7 @@ function initProfileInfo(chat, type) {
         let totalVideos = 0;
         let totalDocuments = 0;
         let totalLinks = 0;
-    
+
         chat.chat_log.forEach(log => {
             if (log.attachments) {
                 if (log.images && log.images.length > 0) {
@@ -1211,13 +1225,12 @@ function initProfileInfo(chat, type) {
                 }
             }
         });
-    
+
         return (totalImages + totalVideos + totalDocuments + totalLinks);
     }
-    
 
     function getLastThreeMediaLogs(chatLogs) {
-        const mediaLogs = chatLogs.filter(log => log.attachments && (log.images.length > 0 || log.videos.length > 0));
+        const mediaLogs = chatLogs.filter(log => log.attachments && (log.images.length > 0 || log.videos.length > 0 || log.documents.length > 0 || log.links.length > 0));
         return mediaLogs.slice(-3).reverse();
     }
 
@@ -1229,14 +1242,25 @@ function initProfileInfo(chat, type) {
             log.images.forEach(image => {
                 mediaHTML += `<div class="attach default-bg"><img src="${image.path}"></div>`;
             });
-        } else if (log.videos && log.videos.length > 0) {
+        }
+        if (log.videos && log.videos.length > 0) {
             log.videos.forEach(video => {
                 mediaHTML += `<div class="attach default-bg"><video src="${video.path}"></video></div>`;
             });
         }
+        if (log.documents && log.documents.length > 0) {
+            log.documents.forEach(document => {
+                mediaHTML += `<div class="attach default-bg"><img src="./images/icons/${document.type}.png" alt="${document.name}"></div>`;
+            });
+        }
+        if (log.links && log.links.length > 0) {
+            log.links.forEach(link => {
+                mediaHTML += `<div class="attach default-bg"><a href="${link.path}"></a></div>`;
+            });
+        }
     });
 
-    profileHTML = `
+    const profileHTML = `
     <div class="profile-header white-bg">
         <div class="heading">
             <img src="./images/icons/cancel.png" class="close">
@@ -1257,7 +1281,7 @@ function initProfileInfo(chat, type) {
         <p class="about-them">${chat.about}</p>
     </div>
 
-     <div class="media white-bg">
+    <div class="media white-bg">
         <div class="head">
             <span>Media, links and docs</span>
             <span>${countAttachments(chat)} <img src="./images/icons/next.png"></span>
@@ -1333,12 +1357,24 @@ function initProfileInfo(chat, type) {
         close($(this).closest(".profile-info"));
         $("#details").css("width", "calc(100vw - 29vw - 60px)");
     });
+
+    $(".profile-info .media .head img").click(() => {
+        initMediaPage(chat);
+        $(".media-page").show();
+        $(".profile-info").hide();
+
+        $(".media-page .close").click(() => {
+            close($(this).closest(".media-page"));
+            $("#details").css("width", "calc(100vw - 29vw - 60px)");
+        });
+    });
 }
 
 
 
 
-// Search tab
+
+//Search tab
 function initSearchTab(chat) {
     const searchHTML = `
     <div class="search-header white-bg">
@@ -1366,8 +1402,185 @@ function initSearchTab(chat) {
 
     $(".search-tab").html(searchHTML);
 
-    $(".search-tab .search-header .close").click(function() {
-        close($(this).closest(".search-tab"));
+    $(".search-tab input").on("keyup", function() {
+        if ($(this).val().trim().length > 0) {
+            $('.cancel').show();
+            $('.search-icon').hide();
+
+            let input = $(this).val().toLowerCase();
+
+            let searchList = chat.chat_log.filter(log => log.msg.toLowerCase().includes(input));
+
+            let resultsHTML = '';
+            for (let i = 0; i < searchList.length; i++) {
+                resultsHTML += `
+                <div class="search-row">
+                    <div class="left-upper" time="${searchList[i].time}">${searchList[i].date}</div>
+                    <img src="./images/icons/${searchList[i].situation}.png">
+                    <div class="searched-msg">
+                        ${searchList[i].msg.length > 50 ? searchList[i].msg.substring(0, 50) + "..." : searchList[i].msg}
+                    </div>
+                </div>
+                <div class="horizontal-divider default-bg"></div>
+                `;
+            }
+
+            $(".search-tab .content").html(resultsHTML);
+
+            $(".search-tab").on("click", ".search-row", function() {
+                const msg = $(this).find(".searched-msg").text().trim();
+                const time = $(this).find(".left-upper").attr("time");
+            
+                $(".chat-screen .msg").each(function() {
+                    const chatMsg = $(this).find(".msg-text").text().trim();
+                    const chatTime = $(this).find(".time").text();
+                    
+                    if (chatMsg === msg && chatTime === time) {
+                        $(this).get(0).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        return false;
+                    }
+                });
+            });
+
+            $(".search-tab").on("click", ".cancel", function() {
+                $(".search-tab input").val("");
+
+                $('.cancel').hide();
+                $('.search-icon').show();
+
+                $(".search-tab .content").empty();
+            });
+        }
+        else {
+            $('.cancel').hide();
+            $('.search-icon').show();
+        }
+    });
+}   
+
+
+
+
+//Media page
+let currMonth = '';
+function extractMonthFromDate(dateString) {
+    const dateParts = dateString.split("-");
+    const month = parseInt(dateParts[1], 10);
+
+    const monthNames = [
+        "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
+        "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
+    ];
+
+    return monthNames[month - 1];
+}
+
+function initMediaPage(data) {
+    let mediaRowsHTML = '';
+    let docRowsHTML = '';
+    let linkRowsHTML = '';
+    let currMonth = '';
+
+    data.chat_log.forEach(log => {
+        const date = log.date;
+        const month = extractMonthFromDate(date);
+
+        let mediaHTML = '';
+        let docHTML = '';
+        let linkHTML = '';
+
+        if (log.images && log.images.length > 0) {
+            log.images.forEach(image => {
+                mediaHTML += `
+                <div class="attach default-bg"><img src="${image.path}"></div>
+                `;
+            });
+        } 
+        if (log.documents && log.documents.length > 0) {
+            log.documents.forEach(document => {
+                docHTML += `
+                <div class="attach default-bg"><img src="./images/icons/${document.type}.png" alt="${document.name}"></div>
+                `;
+            });
+        }
+        if (log.links && log.links.length > 0) {
+            log.links.forEach(link => {
+                linkHTML += `
+                <div class="attach default-bg"><a href="${link.path}"></a></div>
+                `;
+            });
+        }
+
+        if (mediaHTML !== '' || docHTML !== '' || linkHTML !== '') {
+            if (month !== currMonth) {
+                if (currMonth !== '') {
+                    mediaRowsHTML += `</div>`;
+                    docRowsHTML += `</div>`;
+                    linkRowsHTML += `</div>`;
+                }
+                currMonth = month;
+                mediaRowsHTML += `
+                <div class="month">${currMonth}</div>
+                <div class="row">
+                `;
+                docRowsHTML += `
+                <div class="month">${currMonth}</div>
+                <div class="row">
+                `;
+                linkRowsHTML += `
+                <div class="month">${currMonth}</div>
+                <div class="row">
+                `;
+            }
+
+            if (mediaHTML !== '') {
+                mediaRowsHTML += mediaHTML;
+            }
+            if (docHTML !== '') {
+                docRowsHTML += docHTML;
+            }
+            if (linkHTML !== '') {
+                linkRowsHTML += linkHTML;
+            }
+        }
+    });
+
+    mediaRowsHTML += `</div>`;
+    docRowsHTML += `</div>`;
+    linkRowsHTML += `</div>`;
+
+    const mediaPageHTML = `
+    <div class="media-header">
+        <div class="top">
+            <img src="./images/icons/back-white.png" class="close">
+        </div>
+        <ul>
+            <li class="on">Media</li>
+            <li>Docs</li>
+            <li>Links</li>
+        </ul>
+    </div>
+    <div class="media">${mediaRowsHTML}</div>
+    <div class="docs">${docRowsHTML}</div>
+    <div class="links">${linkRowsHTML}</div>
+    `;
+
+    $(".media-page").html(mediaPageHTML);
+
+    $(".media-page .media").show();
+    $(".media-page .docs, .media-page .links").hide();
+
+    $(".media-page ul li").each(function() {
+        $(this).click(() => {
+            $(".media-page ul li").removeClass("on");
+            $(this).addClass("on");
+            $(".media-page .media, .media-page .docs, .media-page .links").hide();
+            $(`.media-page .${$(this).text().toLowerCase()}`).show();
+        });
+    });
+
+    $(".media-page .close").click(function() {
+        close($(this).closest(".media-page"));
         $("#details").css("width", "calc(100vw - 29vw - 60px)");
     });
 }
